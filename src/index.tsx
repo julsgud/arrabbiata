@@ -1,9 +1,6 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import React from 'react'
+import ReactDOM from 'react-dom'
 
-import { Hola } from "./hola";
+import { App } from './App'
 
-ReactDOM.render(
-    <Hola compiler="TypeScript" framework="React" />,
-    document.getElementById("example")
-);
+ReactDOM.render(<App />, document.getElementById('root'))
