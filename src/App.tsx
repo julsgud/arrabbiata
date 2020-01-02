@@ -1,15 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Timer } from './Timer/Timer'
 
 const Container = styled.div`
-  width: 100%;
-  height: 100%;
+  font-family: 'Kulim Park', sans-serif;
+  width: calc(100vw - 2rem);
+  height: calc(100vh - 2rem);
+  padding: 1rem 1rem;
+  background-color: #2D2C29;
+  color: white;
 `
 
 export function App() {
   return (
     <Container>
-      <div> Hola </div>
+      <Timer />
     </Container>
   )
 }
