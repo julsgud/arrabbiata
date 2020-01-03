@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "dotenv": "^8.2.0",
+    "faunadb": "^2.10.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-google-login": "^5.0.7",
