@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {AppWithProviders} from "./App/AppWithProviders";
 
-import { App } from './App/App'
-
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<AppWithProviders />, document.getElementById('root'))
