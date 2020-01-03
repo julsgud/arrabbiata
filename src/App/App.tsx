@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Timer } from './Timer/Timer'
+import { Timer } from '../Timer/Timer'
 
 const Container = styled.div`
   font-family: 'Kulim Park', sans-serif;
