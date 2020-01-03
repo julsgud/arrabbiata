@@ -1,4 +1,3 @@
-require('dotenv').config()
 import React from 'react'
 import styled from 'styled-components'
 import { Timer } from '../Timer/Timer'
@@ -19,6 +18,8 @@ const responseGoogle = (response: object) => {
 }
 
 export function App() {
+
+
   return (
     <Container>
       <GoogleLogin
