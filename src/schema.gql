@@ -1,0 +1,14 @@
+type User @collection(name: "users") {
+  id: String!
+  name: String!
+  email: String!
+}
+
+type UserLogin {
+  instance: User
+}
+
+type Query {
+  allUsers: [User!]
+  loginUser(email: String!, password: String!): UserLogin! @relation @resolver(name: "loginUser")
+}
