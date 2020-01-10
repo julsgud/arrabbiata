@@ -38,6 +38,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       FAUNA_CLIENT_SECRET: process.env.FAUNA_CLIENT_SECRET,
+      FAUNA_SERVER_SECRET: process.env.FAUNA_SERVER_SECRET,
     }),
   ],
 }

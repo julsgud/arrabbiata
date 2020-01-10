@@ -1,8 +1,4 @@
-const faunadb = require('faunadb')
+import faunadb from 'faunadb'
 
-const q = faunadb.query
-const client = new faunadb.Client({
-  secret: process.env.REACT_APP_FAUNADB_SERVER_SECRET,
-})
-
-export { q, client }
+export const client = new faunadb.Client({ secret: window.FAUNA_CLIENT_SECRET })
+export const q = faunadb.query
