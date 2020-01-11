@@ -24,7 +24,7 @@ export function Login({ isSignedIn, setIsSignedIn }: LoginProps) {
 
   return (
     <div>
-      Login
+      Login pls cmon
       <button onClick={login}></button>
     </div>
   )

@@ -19,6 +19,7 @@ const root = {
 const app = express()
 
 app.use(express.static('dist'))
+
 app.use(
   '/graphql',
   graphqlHTTP({
