@@ -1,27 +1,15 @@
 import express from 'express'
 import session from 'express-session'
-const session = require('express-session')
-const graphqlHTTP = require('express-graphql')
-const { buildSchema } = require('graphql')
+import graphqlHTTP from 'express-graphql'
 import passport from 'passport'
-import { getUsers } from './user/userDao'
 import uuid from 'uuid/v4'
 
+import { schema } from './schema'
+import { getUsers } from './user/userDao'
+
 // Construct a schema, using GraphQL schema language
-const schema = buildSchema(`
-  type Query {
-    hello: String
-  }
-`)
 
-// The root provides a resolver function for each API endpoint
-const root = {
-  hello: () => {
-    return 'Hello world!'
-  },
-}
-
-passport.serializeUser((user:any, done) => {
+passport.serializeUser((user: any, done) => {
   done(null, user.id)
 })
 
@@ -38,23 +26,32 @@ const app = express()
 app.use(express.static('dist'))
 
 // for production use, cookie: { secure: true }
+const sessionOptions = {
+  genid: (req: any) => uuid(),
+  secret: SESSION_SECRECT,
+  resave: false,
+  saveUninitialized: false,
+}
 
-app.use(
-  session({
-    genid: (req: any) => uuid(),
-    secret: SESSION_SECRECT,
-    resave: false,
-    saveUninitialized: false,
-  })
-)
+app.use(session(sessionOptions))
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(
   '/graphql',
-  graphqlHTTP({
+  graphqlHTTP((req, res) => ({
     schema: schema,
-    rootValue: root,
+    context: {
+      user: req.user || null,
+      logout: () => req.logout(),
+    },
+    rootValue: {
+      user: req.user || null,
+      logout: () => req.logout(),
+      hello: () => 'Hello world!',
+    },
     graphiql: true,
-  })
+  }))
 )
 
 app.listen(4000)
