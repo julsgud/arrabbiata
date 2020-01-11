@@ -3,9 +3,9 @@ import session from 'express-session'
 const session = require('express-session')
 const graphqlHTTP = require('express-graphql')
 const { buildSchema } = require('graphql')
-import passport from 'passport';
-import User from './User';
-import uuid from 'uuid/v4';
+import passport from 'passport'
+import { getUsers } from './user/userDao'
+import uuid from 'uuid/v4'
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(`
@@ -21,20 +21,17 @@ const root = {
   },
 }
 
-
-...
-
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
+passport.serializeUser((user:any, done) => {
+  done(null, user.id)
+})
 
 passport.deserializeUser((id, done) => {
-    const users = User.getUsers();
-    const matchingUser = users.find(user => user.id === id);
-    done(null, matchingUser);
-});
+  const users = getUsers()
+  const matchingUser = users.find(user => user.id === id)
+  done(null, matchingUser)
+})
 
-const SESSION_SECRECT = 'bad secret';
+const SESSION_SECRECT = 'bad secret'
 
 const app = express()
 
