@@ -39,7 +39,7 @@ app.use(passport.session())
 
 app.use(
   '/graphql',
-  graphqlHTTP((req, res) => ({
+  graphqlHTTP((req:any, res) => ({
     schema: schema,
     context: {
       user: req.user || null,
