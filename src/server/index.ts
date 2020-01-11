@@ -1,6 +1,9 @@
-const express = require('express')
+import express from 'express'
+import session from 'express-session'
+const session = require('express-session')
 const graphqlHTTP = require('express-graphql')
 const { buildSchema } = require('graphql')
+import uuid from 'uuid/v4';
 
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(`
@@ -16,9 +19,22 @@ const root = {
   },
 }
 
+const SESSION_SECRECT = 'bad secret';
+
 const app = express()
 
 app.use(express.static('dist'))
+
+// for production use, cookie: { secure: true }
+
+app.use(
+  session({
+    genid: (req: any) => uuid(),
+    secret: SESSION_SECRECT,
+    resave: false,
+    saveUninitialized: false,
+  })
+)
 
 app.use(
   '/graphql',
