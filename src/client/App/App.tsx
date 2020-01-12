@@ -27,11 +27,25 @@ const CURRENT_USER_QUERY = gql`
 export function App() {
   const { loading, error, data } = useQuery(CURRENT_USER_QUERY)
 
-  console.log(loading, error, data)
+  if (loading) return <div>Loading</div>
+  if (error) return <div>Error: {JSON.stringify(error)}</div>
 
-  return (
-    <Container>
-      <Timer />
-    </Container>
-  )
+  const isLoggedIn = !!data.currentUser
+
+  if (isLoggedIn) {
+    const { id, firstName, lastName, email } = data.currentUser
+
+    return (
+      <>
+        {id}
+        <br />
+        {firstName} {lastName}
+        <br />
+        {email}
+      </>
+    )
+  }
+
+  // SIGNUP AND LOGIN GO HERE
+  return <div>User is not logged in</div>
 }
