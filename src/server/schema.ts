@@ -1,10 +1,5 @@
-import { buildASTSchema, parse, DocumentNode, GraphQLSchema } from "graphql";
-import { addResolveFunctionsToSchema } from "graphql-tools";
-import {typeDefs} from "./typeDefs";
+import { typeDefs } from './typeDefs'
+import { resolvers } from './resolvers'
+import { makeExecutableSchema } from 'graphql-tools'
 
-const ast: DocumentNode = parse(typeDefs);
-const schema: GraphQLSchema = buildASTSchema(ast);
-addResolveFunctionsToSchema({
-    schema,
-    resolvers
-});
+export const schema = makeExecutableSchema({ typeDefs, resolvers })

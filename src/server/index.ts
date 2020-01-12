@@ -3,23 +3,20 @@ import session from 'express-session'
 import graphqlHTTP from 'express-graphql'
 import passport from 'passport'
 import uuid from 'uuid/v4'
+import { GraphQLLocalStrategy, buildContext } from 'graphql-passport'
 
 import { schema } from './schema'
 import { getUsers } from './user/userDao'
-
-// Construct a schema, using GraphQL schema language
-
-passport.serializeUser((user: any, done) => {
-  done(null, user.id)
-})
-
-passport.deserializeUser((id, done) => {
-  const users = getUsers()
-  const matchingUser = users.find(user => user.id === id)
-  done(null, matchingUser)
-})
-
 const SESSION_SECRECT = 'bad secret'
+
+passport.use(
+  new GraphQLLocalStrategy((email, password, done) => {
+    const users = getUsers()
+    const matchingUser = users.find(user => email === user.email && password === user.password)
+    const error = matchingUser ? null : new Error('no matching user')
+    done(error, matchingUser)
+  })
+)
 
 const app = express()
 
@@ -39,20 +36,14 @@ app.use(passport.session())
 
 app.use(
   '/graphql',
-  graphqlHTTP((req:any, res) => ({
-    schema: schema,
-    context: {
-      user: req.user || null,
-      logout: () => req.logout(),
-    },
-    rootValue: {
-      user: req.user || null,
-      logout: () => req.logout(),
-      hello: () => 'Hello world!',
-    },
-    graphiql: true,
-  }))
+  graphqlHTTP((req: any, res) => {
+    return {
+      schema: schema,
+      context: buildContext({ req, res }),
+      graphiql: true,
+    }
+  })
 )
 
 app.listen(4000)
-console.log('Running a GraphQL API server at http://localhost:4000/graphql')
+console.log('Running a GraphQL API server at 👅 http://localhost:4000/graphql')

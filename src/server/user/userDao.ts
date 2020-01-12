@@ -4,7 +4,7 @@ const users = [
     firstName: 'Maurice',
     lastName: 'Moss',
     email: 'maurice@moss.com',
-    password: 'abcdefg',
+    password: 'asdfasdf',
   },
   {
     id: '2',
@@ -19,6 +19,6 @@ export function getUsers() {
   return users
 }
 
-export function addUser(user:any) {
+export function addUser(user: any) {
   return users.push(user)
 }
