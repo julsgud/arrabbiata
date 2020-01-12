@@ -1,7 +1,6 @@
 export const resolvers = {
   Query: {
     currentUser: (parent, args, context) => {
-      console.log(context)
       return context.user
     },
   },

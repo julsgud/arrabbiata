@@ -1,6 +1,7 @@
 const users = [
   {
     id: '1',
+    googleId: '4',
     firstName: 'Maurice',
     lastName: 'Moss',
     email: 'maurice@moss.com',
@@ -8,6 +9,7 @@ const users = [
   },
   {
     id: '2',
+    googleId: '3',
     firstName: 'Roy',
     lastName: 'Trenneman',
     email: 'roy@trenneman.com',
