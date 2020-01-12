@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Timer } from '../Timer/Timer'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 const Container = styled.div`
   font-family: 'Kulim Park', sans-serif;
@@ -11,7 +13,22 @@ const Container = styled.div`
   color: white;
 `
 
+const CURRENT_USER_QUERY = gql`
+  query CurrentUserQuery {
+    currentUser {
+      id
+      firstName
+      lastName
+      email
+    }
+  }
+`
+
 export function App() {
+  const { loading, error, data } = useQuery(CURRENT_USER_QUERY)
+
+  console.log(loading, error, data)
+
   return (
     <Container>
       <Timer />

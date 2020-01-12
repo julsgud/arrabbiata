@@ -56,7 +56,7 @@ passport.use(new GoogleStrategy.OAuth2Strategy(googleAuthOptions, googleAuthCall
 const app = express()
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: `http://localhost:${process.env.CLIENT_PORT}`,
   credentials: true,
 }
 app.use(cors(corsOptions))
@@ -76,7 +76,6 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
-
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
@@ -98,5 +97,5 @@ app.use(
   })
 )
 
-app.listen(4000)
-console.log('Running a GraphQL API server at 👅 http://localhost:4000/graphql')
+app.listen(process.env.API_PORT)
+console.log(`👅 GraphQL API at http://localhost:${process.env.API_PORT}/graphql`)

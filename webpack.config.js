@@ -15,7 +15,7 @@ module.exports = {
   },
 
   devServer: {
-    port: process.env.PORT,
+    port: process.env.CLIENT_PORT,
     open: true,
   },
 
