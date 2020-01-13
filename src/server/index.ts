@@ -8,21 +8,22 @@ import uuid from 'uuid/v4'
 import { schema } from './schema'
 import { runPassport } from './util/passportUtil'
 
-const SESSION_SECRECT = 'bad secret'
-
 runPassport()
 
 const app = express()
 const corsOptions = {
-  origin: `http://localhost:${process.env.CLIENT_PORT}`,
+  origin: `${process.env.CLIENT_URL}`,
   credentials: true,
 }
-
 app.use(cors(corsOptions))
 
-app.use(express.static('dist'))
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('dist'))
+}
 
+// Express Session
 // for production use, cookie: { secure: true }
+const SESSION_SECRECT = 'bad secret'
 const sessionOptions = {
   genid: (req: any) => uuid(),
   secret: SESSION_SECRECT,
@@ -30,18 +31,22 @@ const sessionOptions = {
   saveUninitialized: false,
 }
 app.use(session(sessionOptions))
+
+// Passport Init
 app.use(passport.initialize())
 app.use(passport.session())
 
+// Google Auth
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }))
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', {
-    successRedirect: 'http://localhost:4000/graphql',
-    failureRedirect: 'http://localhost:4000/graphql',
+    successRedirect: process.env.CLIENT_URL,
+    failureRedirect: process.env.CLIENT_URL,
   })
 )
 
+// GraphQL
 app.use(
   '/graphql',
   graphqlHTTP((req: any, res) => {

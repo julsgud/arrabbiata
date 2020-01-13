@@ -2,6 +2,7 @@ require('dotenv').config()
 import uuid from 'uuid/v4'
 import passport from 'passport'
 import GoogleStrategy from 'passport-google-oauth'
+import { getAllUsers } from '../fauna/faunaDao'
 import { getUsers } from '../user/userDao'
 
 export const googleAuthOptions = {
@@ -10,10 +11,12 @@ export const googleAuthOptions = {
   callbackURL: process.env.GOOGLE_CALLBACK_URL,
 }
 
-export function googleAuthCallback(accessToken, refreshToken, profile, done) {
-  const users = getUsers()
-  const matchingUser = users.find(user => user.googleId === profile.id)
+export async function googleAuthCallback(accessToken, refreshToken, profile, done) {
+  const users = await getAllUsers()
+  // const users = getUsers()
+  // const matchingUser = users.find(user => user.googleId === profile.id)
 
+  const matchingUser = true
   if (matchingUser) {
     done(null, matchingUser)
     return
@@ -26,6 +29,8 @@ export function googleAuthCallback(accessToken, refreshToken, profile, done) {
     lastName: profile.name.familyName,
     email: profile.emails && profile.emails[0] && profile.emails[0].value,
   }
+
+  console.log(newUser)
   // @ts-ignore
   users.push(newUser)
   done(null, newUser)
@@ -37,7 +42,6 @@ export function runPassport() {
   })
 
   passport.deserializeUser((id, done) => {
-    console.log('deserialize', id)
     const users = getUsers()
     const matchingUser = users.find(user => user.id === id)
     done(null, matchingUser)

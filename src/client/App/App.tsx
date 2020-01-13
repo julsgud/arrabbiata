@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Timer } from '../Timer/Timer'
 import { useQuery } from '@apollo/react-hooks'
 import gql from 'graphql-tag'
+import { LoginWithGoogle } from '../Login/LoginWithGoogle'
 
 const Container = styled.div`
   font-family: 'Kulim Park', sans-serif;
@@ -47,5 +48,11 @@ export function App() {
   }
 
   // SIGNUP AND LOGIN GO HERE
-  return <div>User is not logged in</div>
+
+  return (
+    <React.Fragment>
+      <LoginWithGoogle />
+      <div>User is not logged in</div>
+    </React.Fragment>
+  )
 }
