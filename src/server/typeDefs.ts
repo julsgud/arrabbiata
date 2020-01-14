@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 export const typeDefs = gql`
     type User {
         id: ID
+        googleId: String
         firstName: String
         lastName: String
         email: String

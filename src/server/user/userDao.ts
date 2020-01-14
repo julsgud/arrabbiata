@@ -1,3 +1,11 @@
+export interface User {
+  id: String
+  googleId: String
+  firstName: String
+  lastName: String
+  email: String
+}
+
 const users = [
   {
     id: '1',

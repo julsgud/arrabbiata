@@ -55,6 +55,7 @@
     "apollo-link-context": "^1.0.19",
     "apollo-link-http": "^1.5.16",
     "await-to": "^0.1.0",
+    "await-to-js": "^2.1.1",
     "bcrypt-nodejs": "0.0.3",
     "dotenv": "^8.2.0",
     "faunadb": "^2.10.2",

@@ -1,8 +1,9 @@
 require('dotenv').config()
 import uuid from 'uuid/v4'
 import passport from 'passport'
+import to from 'await-to'
 import GoogleStrategy from 'passport-google-oauth'
-import { getAllUsers } from '../fauna/faunaDao'
+import {getAllUsers, getUserByEmail} from '../fauna/faunaDao'
 import { getUsers } from '../user/userDao'
 
 export const googleAuthOptions = {
@@ -12,28 +13,30 @@ export const googleAuthOptions = {
 }
 
 export async function googleAuthCallback(accessToken, refreshToken, profile, done) {
-  const users = await getAllUsers()
-  // const users = getUsers()
-  // const matchingUser = users.find(user => user.googleId === profile.id)
+  const userEmail = profile.emails && profile.emails[0] && profile.emails[0].value || null
 
-  const matchingUser = true
-  if (matchingUser) {
-    done(null, matchingUser)
+  if (!userEmail) {
+    done(new Error('User not found'), null)
+  }
+
+  const user = getUserByEmail(userEmail)
+  if (user) {
+    done(null, user)
     return
   }
 
-  const newUser = {
-    id: uuid(),
-    googleId: profile.id,
-    firstName: profile.name.givenName,
-    lastName: profile.name.familyName,
-    email: profile.emails && profile.emails[0] && profile.emails[0].value,
-  }
-
-  console.log(newUser)
-  // @ts-ignore
-  users.push(newUser)
-  done(null, newUser)
+  // const newUser = {
+  //   id: uuid(),
+  //   googleId: profile.id,
+  //   firstName: profile.name.givenName,
+  //   lastName: profile.name.familyName,
+  //   email: profile.emails && profile.emails[0] && profile.emails[0].value,
+  // }
+  //
+  // console.log(newUser)
+  // // @ts-ignore
+  // users.push(newUser)
+  // done(null, newUser)
 }
 
 export function runPassport() {
