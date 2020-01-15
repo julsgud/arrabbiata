@@ -1,3 +1,11 @@
 import { createContext } from 'react'
 
-export const AuthContext = createContext({ isLoggedIn: false })
+interface AuthContextInterface {
+  isLoggedIn: boolean
+}
+
+const defaultValue = {
+  isLoggedIn: false,
+}
+
+export const AuthContext = createContext<AuthContextInterface>(defaultValue)

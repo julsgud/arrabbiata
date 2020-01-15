@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { UserContext } from '../../contexts/UserContext'
+import { Timer } from '../Timer/Timer'
 
 const Container = styled.div`
   font-family: 'Kulim Park', sans-serif;
@@ -12,5 +13,11 @@ const Container = styled.div`
 export function Home() {
   const user = useContext(UserContext)
 
-  return <div> hola </div>
+  return (
+    <>
+      <div> Hey {user.firstName || 'There'} </div>
+      <div> Get to work! </div>
+      <Timer />
+    </>
+  )
 }

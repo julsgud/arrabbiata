@@ -1,3 +1,12 @@
-import {createContext} from "react"
+import { createContext } from 'react'
+import { User } from '../../server/user/userDao'
 
-export const UserContext = createContext({})
+const defaultUser = {
+  id: '1',
+  googleId: '2',
+  email: 'someEmail@thatmail.com',
+  firstName: 'There',
+  lastName: 'You',
+}
+
+export const UserContext = createContext<User>(defaultUser)

@@ -5,7 +5,7 @@ import { createHttpLink } from 'apollo-link-http'
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
-import { Routes } from './Routes'
+import { Routes } from './Routes/Routes'
 import { Gatekeeper } from '../Gatekeeper/Gatekeeper'
 
 export const link = createHttpLink({
