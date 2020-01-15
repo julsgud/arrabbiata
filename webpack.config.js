@@ -17,6 +17,7 @@ module.exports = {
   devServer: {
     port: process.env.CLIENT_PORT,
     open: true,
+    historyApiFallback: true,
   },
 
   module: {

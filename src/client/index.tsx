@@ -1,5 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {AppWithProviders} from "./App/AppWithProviders";
+import {Providers} from "./components/App/Providers";
 
-ReactDOM.render(<AppWithProviders />, document.getElementById('root'))
+ReactDOM.render(<Providers />, document.getElementById('root'))

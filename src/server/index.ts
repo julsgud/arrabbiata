@@ -1,5 +1,6 @@
 require('dotenv').config()
 import express from 'express'
+import path from 'path'
 import session from 'express-session'
 import cors from 'cors'
 import graphqlHTTP from 'express-graphql'
@@ -19,6 +20,11 @@ app.use(cors(corsOptions))
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('dist'))
+  app.get('/*', function(req, res) {
+    res.sendFile(path.join(__dirname, '../../dist/index.html'), function(err) {
+      if (err) res.status(500).send(err)
+    })
+  })
 }
 
 // Express Session

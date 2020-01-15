@@ -5,7 +5,8 @@ import { createHttpLink } from 'apollo-link-http'
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 
-import { App } from './App'
+import { Routes } from './Routes'
+import { Gatekeeper } from '../Gatekeeper/Gatekeeper'
 
 export const link = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -17,11 +18,13 @@ export const client = new ApolloClient({
   link,
 })
 
-export function AppWithProviders() {
+export function Providers() {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <App />
+        <Gatekeeper>
+          <Routes />
+        </Gatekeeper>
       </Router>
     </ApolloProvider>
   )
