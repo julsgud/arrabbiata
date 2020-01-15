@@ -1,10 +1,8 @@
 require('dotenv').config()
-import uuid from 'uuid/v4'
 import passport from 'passport'
-import to from 'await-to'
 import GoogleStrategy from 'passport-google-oauth'
-import {getAllUsers, getUserByEmail} from '../fauna/faunaDao'
-import { getUsers } from '../user/userDao'
+import to from 'await-to-js'
+import { getUserByEmail, getUserById, User } from '../user/userDao'
 
 export const googleAuthOptions = {
   clientID: process.env.GOOGLE_AUTH_CLIENT_ID,
@@ -12,19 +10,22 @@ export const googleAuthOptions = {
   callbackURL: process.env.GOOGLE_CALLBACK_URL,
 }
 
+// @ts-ignore
 export async function googleAuthCallback(accessToken, refreshToken, profile, done) {
-  const userEmail = profile.emails && profile.emails[0] && profile.emails[0].value || null
+  const userEmail = (profile.emails && profile.emails[0] && profile.emails[0].value) || null
 
   if (!userEmail) {
     done(new Error('User not found'), null)
   }
 
-  const user = getUserByEmail(userEmail)
-  if (user) {
-    done(null, user)
+  const [err, user] = await to(getUserByEmail(userEmail))
+  if (err) {
+    done('No user registered with that email', null)
     return
   }
 
+  done(null, user)
+  return
   // const newUser = {
   //   id: uuid(),
   //   googleId: profile.id,
@@ -40,14 +41,13 @@ export async function googleAuthCallback(accessToken, refreshToken, profile, don
 }
 
 export function runPassport() {
-  passport.serializeUser((user: any, done) => {
+  passport.serializeUser((user: User, done) => {
     done(null, user.id)
   })
 
-  passport.deserializeUser((id, done) => {
-    const users = getUsers()
-    const matchingUser = users.find(user => user.id === id)
-    done(null, matchingUser)
+  passport.deserializeUser(async (id: string, done) => {
+    const user = await getUserById(id)
+    done(null, user)
   })
 
   passport.use(new GoogleStrategy.OAuth2Strategy(googleAuthOptions, googleAuthCallback))
