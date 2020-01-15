@@ -1,4 +1,5 @@
 import React from 'react'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { createHttpLink } from 'apollo-link-http'
 import { ApolloClient } from 'apollo-client'
@@ -19,7 +20,9 @@ export const client = new ApolloClient({
 export function AppWithProviders() {
   return (
     <ApolloProvider client={client}>
-      <App />
+      <Router>
+        <App />
+      </Router>
     </ApolloProvider>
   )
 }
