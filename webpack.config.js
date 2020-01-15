@@ -3,7 +3,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  entry: './src/client/index',
+  entry: './src/public/index',
 
   output: {
     path: path.join(__dirname, '/dist'),
@@ -38,7 +38,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/client/index.html',
+      template: './src/public/index.html',
       FAUNA_CLIENT_SECRET: process.env.FAUNA_CLIENT_SECRET,
       FAUNA_SERVER_SECRET: process.env.FAUNA_SERVER_SECRET,
     }),
