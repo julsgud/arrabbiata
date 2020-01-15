@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { secondsToMinutesSecondsFormat } from './Timer.util'
-
-const Container = styled.div`
-  font-size: 2rem;
-  display: flex;
-  flex-flow: column nowrap;
-  & > button {
-    font-size: 2rem;
-  }
-`
 
 const TWENTY_FIVE_MINUTES_IN_SECONDS = 1500
 const FIVE_MINUTES_IN_SECONDS = 300
@@ -60,10 +50,10 @@ export function Timer() {
   }, [isActive, currentTimeInSeconds])
 
   return (
-    <Container>
+    <>
       {secondsToMinutesSecondsFormat(currentTimeInSeconds)} {workCount} {breakCount}
       <button onClick={toggle}>{isActive ? 'Pause' : 'Play'}</button>
       <button onClick={reset}> Reset </button>
-    </Container>
+    </>
   )
 }

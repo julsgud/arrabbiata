@@ -1,8 +1,8 @@
 import React from 'react'
-import {Redirect, Route, Switch} from 'react-router-dom'
-import {Home} from '../../Home/Home'
-import {Login} from '../../Login/Login'
-import {PrivateRoute} from "./PrivateRoute";
+import { Redirect, Route, Switch } from 'react-router-dom'
+import { Home } from '../../Home/Home'
+import { Login } from '../../Login/Login'
+import { PrivateRoute } from './PrivateRoute'
 
 export function Routes() {
   return (
