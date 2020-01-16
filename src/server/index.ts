@@ -6,7 +6,7 @@ import cors from 'cors'
 import graphqlHTTP from 'express-graphql'
 import passport from 'passport'
 import uuid from 'uuid/v4'
-import { schema } from './schema'
+import { schema } from './gql/schema'
 import { runPassport } from './util/passportUtil'
 
 runPassport()
