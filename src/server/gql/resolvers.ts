@@ -1,14 +1,19 @@
+import { getCategoriesByUserId } from '../daos/category/categoryDao'
+
 export const resolvers = {
   Query: {
-    currentUser: (parent, args, context) => {
+    currentUser: (root, args, context) => {
       return context.user
+    },
+    userData: async (root, { userId }) => {
+      return await getCategoriesByUserId(userId)
     },
   },
   Mutation: {
-    logout: (parent, args, context) => {
+    logout: (root, args, context) => {
       return context.logout
     },
-    login: async (parent, { email, password }, context) => {
+    login: async (root, { email, password }, context) => {
       const { user } = await context.authenticate('graphql-local', { email, password })
       context.login(user)
       return { user }

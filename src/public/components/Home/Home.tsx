@@ -3,7 +3,7 @@ import { UserContext } from '../../contexts/UserContext'
 import { Timer } from '../Timer/Timer'
 
 export function Home() {
-  const user = useContext(UserContext)
+  const { user } = useContext(UserContext)
 
   return (
     <>
