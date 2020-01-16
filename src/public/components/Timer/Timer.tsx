@@ -6,7 +6,7 @@ const FIVE_MINUTES_IN_SECONDS = 300
 
 export function Timer() {
   const [currentlyOnWorkCountdown, setCurrentlyOnWorkCountdown] = useState(true)
-  const [currentTimeInSeconds, setCurrentTimeInSeconds] = useState(5)
+  const [currentTimeInSeconds, setCurrentTimeInSeconds] = useState(TWENTY_FIVE_MINUTES_IN_SECONDS)
   const [isActive, setIsActive] = useState(false)
   const [workCount, setWorkCount] = useState(0)
   const [breakCount, setBreakCount] = useState(0)
@@ -51,7 +51,12 @@ export function Timer() {
 
   return (
     <>
-      {secondsToMinutesSecondsFormat(currentTimeInSeconds)} {workCount} {breakCount}
+      {secondsToMinutesSecondsFormat(currentTimeInSeconds)}
+      <br />
+      {'Done: ' + workCount}
+      <br />
+      {'Breaks: ' + breakCount}
+      <br />
       <button onClick={toggle}>{isActive ? 'Pause' : 'Play'}</button>
       <button onClick={reset}> Reset </button>
     </>

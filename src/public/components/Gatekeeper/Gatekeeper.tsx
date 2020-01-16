@@ -15,7 +15,7 @@ export function Gatekeeper({ children }) {
   return (
     <React.Fragment>
       <AuthContext.Provider value={{ isLoggedIn: !!currentUser }}>
-        <UserContext.Provider value={data.currentUser}>{children}</UserContext.Provider>
+        <UserContext.Provider value={{ user: data.currentUser }}>{children}</UserContext.Provider>
       </AuthContext.Provider>
     </React.Fragment>
   )

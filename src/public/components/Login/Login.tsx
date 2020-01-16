@@ -6,7 +6,7 @@ import { LoginWithGoogle } from './LoginWithGoogle'
 export function Login() {
   const { isLoggedIn } = useContext(AuthContext)
 
-  if (isLoggedIn) return <Redirect to="/home" />
+  if (isLoggedIn) return <Redirect to="/app/home" />
   return (
     <>
       Plis <LoginWithGoogle />

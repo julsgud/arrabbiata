@@ -1,12 +1,20 @@
 import { createContext } from 'react'
-import { User } from '../../server/user/userDao'
+import { User } from '../../server/daos/user/userDao'
+import { Category } from '../../server/daos/category/categoryDao'
+
+interface UserContextInterface {
+  user: User
+  categories?: [Category]
+}
 
 const defaultUser = {
   id: '1',
-  googleId: '2',
-  email: 'someEmail@thatmail.com',
-  firstName: 'There',
-  lastName: 'You',
+  googleId: '1',
+  email: 'example@hmail.com',
+  firstName: 'there',
+  lastName: 'you',
 }
 
-export const UserContext = createContext<User>(defaultUser)
+export const UserContext = createContext<UserContextInterface>({
+  user: defaultUser,
+})
