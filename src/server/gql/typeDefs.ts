@@ -17,13 +17,9 @@ export const typeDefs = gql`
     description: String
   }
 
-  type UserData {
-    categories: [Category]!
-  }
-
   type Query {
     currentUser: User
-    userData(userId: ID): UserData
+    userData(userId: ID): [Category]!
   }
 
   type AuthPayload {

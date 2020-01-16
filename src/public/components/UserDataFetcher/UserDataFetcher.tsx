@@ -10,7 +10,7 @@ export function UserDataFetcher({ children }) {
   if (loading) return <div> Loading </div>
   if (error) return <div> Error </div>
 
-  const { categories = [] } = data.getUserData
+  const { categories = [] } = data.userData
 
   return <UserContext.Provider value={{ user, categories }}>{children}</UserContext.Provider>
 }

@@ -8,6 +8,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
+    publicPath: '/',
   },
 
   resolve: {
@@ -16,8 +17,8 @@ module.exports = {
 
   devServer: {
     port: process.env.CLIENT_PORT,
-    open: true,
     historyApiFallback: true,
+    open: true
   },
 
   module: {

@@ -1,7 +1,7 @@
 import to from 'await-to-js'
 import { CATEGORIES_BY_USER_ID_INDEX } from '../../services/fauna/indexNames'
 import { throwError } from '../../util/errorHandler'
-import { getDocumentByIndexAndId } from '../../services/fauna/faunaDao'
+import { getDocumentsOnIndexById } from '../../services/fauna/faunaDao'
 
 export interface Category {
   id: String
@@ -12,7 +12,7 @@ export interface Category {
 }
 
 export async function getCategoriesByUserId(userId: string): Promise<Category | Error> {
-  const [err, response] = await to(getDocumentByIndexAndId(CATEGORIES_BY_USER_ID_INDEX, userId))
+  const [err, response] = await to(getDocumentsOnIndexById(CATEGORIES_BY_USER_ID_INDEX, userId))
   if (err) throwError(err)
-  return response && response.data
+  return response.data.length && response.data.map(result => result.data) || []
 }
