@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
-export const GET_USER_DATA = gql`  
-  query GetUserData($userId: ID!) {
-    getUserData(userId: $userId) {
+export const USER_DATA = gql`  
+  query UserData($userId: ID!) {
+    userData(userId: $userId) {
       id
       categoryName
       createdAt

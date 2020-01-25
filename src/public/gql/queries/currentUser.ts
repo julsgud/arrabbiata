@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-export const CURRENT_USER_QUERY = gql`
-  query CurrentUserQuery {
+export const CURRENT_USER = gql`
+  query CurrentUser {
     currentUser {
       id
       firstName

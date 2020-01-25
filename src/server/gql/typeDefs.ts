@@ -25,7 +25,8 @@ export const typeDefs = gql`
 
   type Query {
     currentUser: User
-    getUserData(userId: ID): [Category]!
+    userData(userId: ID): [Category]!
+    timer: Timer!
   }
 
   type AuthPayload {
@@ -35,5 +36,8 @@ export const typeDefs = gql`
   type Mutation {
     login(email: String!, password: String!): AuthPayload
     logout: Boolean
+    setCurrentTime(timeInSeconds: Int!): Boolean
+    stopTimer: Boolean
+    toggleIsRunning: Boolean
   }
 `

@@ -31,6 +31,9 @@ export type Mutation = {
    __typename?: 'Mutation',
   login?: Maybe<AuthPayload>,
   logout?: Maybe<Scalars['Boolean']>,
+  setCurrentTime?: Maybe<Scalars['Boolean']>,
+  stopTimer?: Maybe<Scalars['Boolean']>,
+  toggleIsRunning?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -39,14 +42,20 @@ export type MutationLoginArgs = {
   password: Scalars['String']
 };
 
+
+export type MutationSetCurrentTimeArgs = {
+  timeInSeconds: Scalars['Int']
+};
+
 export type Query = {
    __typename?: 'Query',
   currentUser?: Maybe<User>,
-  getUserData: Array<Maybe<Category>>,
+  userData: Array<Maybe<Category>>,
+  timer: Timer,
 };
 
 
-export type QueryGetUserDataArgs = {
+export type QueryUserDataArgs = {
   userId?: Maybe<Scalars['ID']>
 };
 
@@ -66,10 +75,36 @@ export type User = {
   email?: Maybe<Scalars['String']>,
 };
 
-export type CurrentUserQueryQueryVariables = {};
+export type SetCurrentTimeMutationVariables = {
+  timeInSeconds: Scalars['Int']
+};
 
 
-export type CurrentUserQueryQuery = (
+export type SetCurrentTimeMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'setCurrentTime'>
+);
+
+export type StopTimerMutationVariables = {};
+
+
+export type StopTimerMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'stopTimer'>
+);
+
+export type ToggleIsRunningMutationVariables = {};
+
+
+export type ToggleIsRunningMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'toggleIsRunning'>
+);
+
+export type CurrentUserQueryVariables = {};
+
+
+export type CurrentUserQuery = (
   { __typename?: 'Query' }
   & { currentUser: Maybe<(
     { __typename?: 'User' }
@@ -77,14 +112,25 @@ export type CurrentUserQueryQuery = (
   )> }
 );
 
-export type GetUserDataQueryVariables = {
+export type TimerQueryVariables = {};
+
+
+export type TimerQuery = (
+  { __typename?: 'Query' }
+  & { timer: (
+    { __typename?: 'Timer' }
+    & Pick<Timer, 'id' | 'isRunning' | 'currentTimeInSeconds'>
+  ) }
+);
+
+export type UserDataQueryVariables = {
   userId: Scalars['ID']
 };
 
 
-export type GetUserDataQuery = (
+export type UserDataQuery = (
   { __typename?: 'Query' }
-  & { getUserData: Array<Maybe<(
+  & { userData: Array<Maybe<(
     { __typename?: 'Category' }
     & Pick<Category, 'id' | 'categoryName' | 'createdAt' | 'description'>
   )>> }
@@ -166,11 +212,11 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>,
   String: ResolverTypeWrapper<Scalars['String']>,
   Category: ResolverTypeWrapper<Category>,
+  Timer: ResolverTypeWrapper<Timer>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  Int: ResolverTypeWrapper<Scalars['Int']>,
   Mutation: ResolverTypeWrapper<{}>,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Timer: ResolverTypeWrapper<Timer>,
-  Int: ResolverTypeWrapper<Scalars['Int']>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -180,11 +226,11 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'],
   String: Scalars['String'],
   Category: Category,
+  Timer: Timer,
+  Boolean: Scalars['Boolean'],
+  Int: Scalars['Int'],
   Mutation: {},
   AuthPayload: AuthPayload,
-  Boolean: Scalars['Boolean'],
-  Timer: Timer,
-  Int: Scalars['Int'],
 };
 
 export type AuthPayloadResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthPayload'] = ResolversParentTypes['AuthPayload']> = {
@@ -202,11 +248,15 @@ export type CategoryResolvers<ContextType = any, ParentType extends ResolversPar
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>,
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  setCurrentTime?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCurrentTimeArgs, 'timeInSeconds'>>,
+  stopTimer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  toggleIsRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   currentUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  getUserData?: Resolver<Array<Maybe<ResolversTypes['Category']>>, ParentType, ContextType, QueryGetUserDataArgs>,
+  userData?: Resolver<Array<Maybe<ResolversTypes['Category']>>, ParentType, ContextType, QueryUserDataArgs>,
+  timer?: Resolver<ResolversTypes['Timer'], ParentType, ContextType>,
 };
 
 export type TimerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timer'] = ResolversParentTypes['Timer']> = {
@@ -240,8 +290,96 @@ export type Resolvers<ContextType = any> = {
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
 
 
-export const CurrentUserQueryDocument = gql`
-    query CurrentUserQuery {
+export const SetCurrentTimeDocument = gql`
+    mutation SetCurrentTime($timeInSeconds: Int!) {
+  setCurrentTime(timeInSeconds: $timeInSeconds) @client
+}
+    `;
+export type SetCurrentTimeMutationFn = ApolloReactCommon.MutationFunction<SetCurrentTimeMutation, SetCurrentTimeMutationVariables>;
+
+/**
+ * __useSetCurrentTimeMutation__
+ *
+ * To run a mutation, you first call `useSetCurrentTimeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetCurrentTimeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setCurrentTimeMutation, { data, loading, error }] = useSetCurrentTimeMutation({
+ *   variables: {
+ *      timeInSeconds: // value for 'timeInSeconds'
+ *   },
+ * });
+ */
+export function useSetCurrentTimeMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetCurrentTimeMutation, SetCurrentTimeMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetCurrentTimeMutation, SetCurrentTimeMutationVariables>(SetCurrentTimeDocument, baseOptions);
+      }
+export type SetCurrentTimeMutationHookResult = ReturnType<typeof useSetCurrentTimeMutation>;
+export type SetCurrentTimeMutationResult = ApolloReactCommon.MutationResult<SetCurrentTimeMutation>;
+export type SetCurrentTimeMutationOptions = ApolloReactCommon.BaseMutationOptions<SetCurrentTimeMutation, SetCurrentTimeMutationVariables>;
+export const StopTimerDocument = gql`
+    mutation StopTimer {
+  stopTimer @client
+}
+    `;
+export type StopTimerMutationFn = ApolloReactCommon.MutationFunction<StopTimerMutation, StopTimerMutationVariables>;
+
+/**
+ * __useStopTimerMutation__
+ *
+ * To run a mutation, you first call `useStopTimerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStopTimerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [stopTimerMutation, { data, loading, error }] = useStopTimerMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useStopTimerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<StopTimerMutation, StopTimerMutationVariables>) {
+        return ApolloReactHooks.useMutation<StopTimerMutation, StopTimerMutationVariables>(StopTimerDocument, baseOptions);
+      }
+export type StopTimerMutationHookResult = ReturnType<typeof useStopTimerMutation>;
+export type StopTimerMutationResult = ApolloReactCommon.MutationResult<StopTimerMutation>;
+export type StopTimerMutationOptions = ApolloReactCommon.BaseMutationOptions<StopTimerMutation, StopTimerMutationVariables>;
+export const ToggleIsRunningDocument = gql`
+    mutation ToggleIsRunning {
+  toggleIsRunning @client
+}
+    `;
+export type ToggleIsRunningMutationFn = ApolloReactCommon.MutationFunction<ToggleIsRunningMutation, ToggleIsRunningMutationVariables>;
+
+/**
+ * __useToggleIsRunningMutation__
+ *
+ * To run a mutation, you first call `useToggleIsRunningMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleIsRunningMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleIsRunningMutation, { data, loading, error }] = useToggleIsRunningMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useToggleIsRunningMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ToggleIsRunningMutation, ToggleIsRunningMutationVariables>) {
+        return ApolloReactHooks.useMutation<ToggleIsRunningMutation, ToggleIsRunningMutationVariables>(ToggleIsRunningDocument, baseOptions);
+      }
+export type ToggleIsRunningMutationHookResult = ReturnType<typeof useToggleIsRunningMutation>;
+export type ToggleIsRunningMutationResult = ApolloReactCommon.MutationResult<ToggleIsRunningMutation>;
+export type ToggleIsRunningMutationOptions = ApolloReactCommon.BaseMutationOptions<ToggleIsRunningMutation, ToggleIsRunningMutationVariables>;
+export const CurrentUserDocument = gql`
+    query CurrentUser {
   currentUser {
     id
     firstName
@@ -252,32 +390,66 @@ export const CurrentUserQueryDocument = gql`
     `;
 
 /**
- * __useCurrentUserQueryQuery__
+ * __useCurrentUserQuery__
  *
- * To run a query within a React component, call `useCurrentUserQueryQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQueryQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCurrentUserQueryQuery({
+ * const { data, loading, error } = useCurrentUserQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCurrentUserQueryQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>) {
-        return ApolloReactHooks.useQuery<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>(CurrentUserQueryDocument, baseOptions);
+export function useCurrentUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+        return ApolloReactHooks.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
       }
-export function useCurrentUserQueryLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>(CurrentUserQueryDocument, baseOptions);
+export function useCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, baseOptions);
         }
-export type CurrentUserQueryQueryHookResult = ReturnType<typeof useCurrentUserQueryQuery>;
-export type CurrentUserQueryLazyQueryHookResult = ReturnType<typeof useCurrentUserQueryLazyQuery>;
-export type CurrentUserQueryQueryResult = ApolloReactCommon.QueryResult<CurrentUserQueryQuery, CurrentUserQueryQueryVariables>;
-export const GetUserDataDocument = gql`
-    query GetUserData($userId: ID!) {
-  getUserData(userId: $userId) {
+export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
+export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
+export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const TimerDocument = gql`
+    query Timer {
+  timer @client {
+    id
+    isRunning
+    currentTimeInSeconds
+  }
+}
+    `;
+
+/**
+ * __useTimerQuery__
+ *
+ * To run a query within a React component, call `useTimerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTimerQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTimerQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTimerQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<TimerQuery, TimerQueryVariables>) {
+        return ApolloReactHooks.useQuery<TimerQuery, TimerQueryVariables>(TimerDocument, baseOptions);
+      }
+export function useTimerLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<TimerQuery, TimerQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<TimerQuery, TimerQueryVariables>(TimerDocument, baseOptions);
+        }
+export type TimerQueryHookResult = ReturnType<typeof useTimerQuery>;
+export type TimerLazyQueryHookResult = ReturnType<typeof useTimerLazyQuery>;
+export type TimerQueryResult = ApolloReactCommon.QueryResult<TimerQuery, TimerQueryVariables>;
+export const UserDataDocument = gql`
+    query UserData($userId: ID!) {
+  userData(userId: $userId) {
     id
     categoryName
     createdAt
@@ -287,27 +459,27 @@ export const GetUserDataDocument = gql`
     `;
 
 /**
- * __useGetUserDataQuery__
+ * __useUserDataQuery__
  *
- * To run a query within a React component, call `useGetUserDataQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUserDataQuery` returns an object from Apollo Client that contains loading, error, and data properties 
+ * To run a query within a React component, call `useUserDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserDataQuery` returns an object from Apollo Client that contains loading, error, and data properties 
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetUserDataQuery({
+ * const { data, loading, error } = useUserDataQuery({
  *   variables: {
  *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useGetUserDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetUserDataQuery, GetUserDataQueryVariables>) {
-        return ApolloReactHooks.useQuery<GetUserDataQuery, GetUserDataQueryVariables>(GetUserDataDocument, baseOptions);
+export function useUserDataQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<UserDataQuery, UserDataQueryVariables>) {
+        return ApolloReactHooks.useQuery<UserDataQuery, UserDataQueryVariables>(UserDataDocument, baseOptions);
       }
-export function useGetUserDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetUserDataQuery, GetUserDataQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<GetUserDataQuery, GetUserDataQueryVariables>(GetUserDataDocument, baseOptions);
+export function useUserDataLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<UserDataQuery, UserDataQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<UserDataQuery, UserDataQueryVariables>(UserDataDocument, baseOptions);
         }
-export type GetUserDataQueryHookResult = ReturnType<typeof useGetUserDataQuery>;
-export type GetUserDataLazyQueryHookResult = ReturnType<typeof useGetUserDataLazyQuery>;
-export type GetUserDataQueryResult = ApolloReactCommon.QueryResult<GetUserDataQuery, GetUserDataQueryVariables>;
+export type UserDataQueryHookResult = ReturnType<typeof useUserDataQuery>;
+export type UserDataLazyQueryHookResult = ReturnType<typeof useUserDataLazyQuery>;
+export type UserDataQueryResult = ApolloReactCommon.QueryResult<UserDataQuery, UserDataQueryVariables>;

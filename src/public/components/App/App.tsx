@@ -6,7 +6,7 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { Layout } from './Layout/Layout'
 import { Gatekeeper } from '../Gatekeeper/Gatekeeper'
-import { GET_TIMER } from '../../hooks/useTimer'
+import {GET_TIMER} from "../../gql/queries/timer";
 
 export const link = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -55,7 +55,7 @@ export function App() {
     cache.writeQuery({
       query: GET_TIMER,
       data: {
-        timer,
+        timer
       },
     })
 

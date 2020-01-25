@@ -1,21 +1,20 @@
 import React from 'react'
-import { useQuery } from '@apollo/react-hooks'
-import { CURRENT_USER_QUERY } from '../../gql/queries/currentUser'
 import { AuthContext } from '../../contexts/AuthContext'
-import { UserContext } from '../../contexts/UserContext'
+import {useCurrentUserQuery} from "../../../generated/graphql";
+import {GqlError} from "../GqlError/GqlError";
 
 export function Gatekeeper({ children }) {
-  const { loading, error, data } = useQuery(CURRENT_USER_QUERY)
+  const { loading, error, data } = useCurrentUserQuery()
 
   if (loading) return <div>Loading</div>
-  if (error) return <div>Error: {JSON.stringify(error)}</div>
+  if (error) return <GqlError error={error}/>
 
-  const currentUser = data.currentUser
+  const currentUser = data?.currentUser || {}
 
   return (
     <React.Fragment>
       <AuthContext.Provider value={{ isLoggedIn: !!currentUser }}>
-        <UserContext.Provider value={{ user: data.currentUser }}>{children}</UserContext.Provider>
+        {children}
       </AuthContext.Provider>
     </React.Fragment>
   )
