@@ -25,7 +25,7 @@ export const typeDefs = gql`
 
   type Query {
     currentUser: User
-    userData(userId: ID): [Category]!
+    getUserData(userId: ID): [Category]!
   }
 
   type AuthPayload {

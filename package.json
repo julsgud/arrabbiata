@@ -6,7 +6,8 @@
   "scripts": {
     "client": "webpack-dev-server --mode development --devtool inline-source-map --hot",
     "server": "nodemon",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "keywords": [],
   "author": "Julio Gudino",
@@ -18,6 +19,11 @@
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-react": "^7.7.4",
     "@babel/preset-typescript": "^7.7.7",
+    "@graphql-codegen/cli": "^1.11.2",
+    "@graphql-codegen/typescript": "^1.11.2",
+    "@graphql-codegen/typescript-operations": "1.11.2",
+    "@graphql-codegen/typescript-react-apollo": "1.11.2",
+    "@graphql-codegen/typescript-resolvers": "1.11.2",
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
     "@types/styled-components": "^4.4.1",
