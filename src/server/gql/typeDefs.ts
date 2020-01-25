@@ -16,6 +16,12 @@ export const typeDefs = gql`
     createdAt: String
     description: String
   }
+  
+  type Timer {
+    id: ID
+    isRunning: Boolean
+    currentTimeInSeconds: Int
+  }
 
   type Query {
     currentUser: User
