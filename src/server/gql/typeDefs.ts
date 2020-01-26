@@ -47,5 +47,6 @@ export const typeDefs = gql`
     setCurrentTime(timeInSeconds: Int!): Boolean
     toggleIsRunning: Boolean
     stopTimer: Boolean
+    setCycleCategory(categoryId: String!): Boolean
   }
 `

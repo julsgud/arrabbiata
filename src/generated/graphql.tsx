@@ -34,6 +34,7 @@ export type Mutation = {
   setCurrentTime?: Maybe<Scalars['Boolean']>,
   toggleIsRunning?: Maybe<Scalars['Boolean']>,
   stopTimer?: Maybe<Scalars['Boolean']>,
+  setCycleCategory?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -45,6 +46,11 @@ export type MutationLoginArgs = {
 
 export type MutationSetCurrentTimeArgs = {
   timeInSeconds: Scalars['Int']
+};
+
+
+export type MutationSetCycleCategoryArgs = {
+  categoryId: Scalars['String']
 };
 
 export type Query = {
@@ -91,6 +97,16 @@ export type SetCurrentTimeMutationVariables = {
 export type SetCurrentTimeMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'setCurrentTime'>
+);
+
+export type SetCycleCategoryMutationVariables = {
+  categoryId: Scalars['String']
+};
+
+
+export type SetCycleCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'setCycleCategory'>
 );
 
 export type StopTimerMutationVariables = {};
@@ -264,6 +280,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   setCurrentTime?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCurrentTimeArgs, 'timeInSeconds'>>,
   toggleIsRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   stopTimer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  setCycleCategory?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCycleCategoryArgs, 'categoryId'>>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -336,6 +353,36 @@ export function useSetCurrentTimeMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type SetCurrentTimeMutationHookResult = ReturnType<typeof useSetCurrentTimeMutation>;
 export type SetCurrentTimeMutationResult = ApolloReactCommon.MutationResult<SetCurrentTimeMutation>;
 export type SetCurrentTimeMutationOptions = ApolloReactCommon.BaseMutationOptions<SetCurrentTimeMutation, SetCurrentTimeMutationVariables>;
+export const SetCycleCategoryDocument = gql`
+    mutation SetCycleCategory($categoryId: String!) {
+  setCycleCategory(categoryId: $categoryId) @client
+}
+    `;
+export type SetCycleCategoryMutationFn = ApolloReactCommon.MutationFunction<SetCycleCategoryMutation, SetCycleCategoryMutationVariables>;
+
+/**
+ * __useSetCycleCategoryMutation__
+ *
+ * To run a mutation, you first call `useSetCycleCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetCycleCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setCycleCategoryMutation, { data, loading, error }] = useSetCycleCategoryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useSetCycleCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetCycleCategoryMutation, SetCycleCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetCycleCategoryMutation, SetCycleCategoryMutationVariables>(SetCycleCategoryDocument, baseOptions);
+      }
+export type SetCycleCategoryMutationHookResult = ReturnType<typeof useSetCycleCategoryMutation>;
+export type SetCycleCategoryMutationResult = ApolloReactCommon.MutationResult<SetCycleCategoryMutation>;
+export type SetCycleCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<SetCycleCategoryMutation, SetCycleCategoryMutationVariables>;
 export const StopTimerDocument = gql`
     mutation StopTimer {
   stopTimer @client

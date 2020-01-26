@@ -24,7 +24,7 @@ export function App() {
       link,
       resolvers: {
         Mutation: {
-          saveTimerCategory: (_, args, { cache }): null => {
+          setCycleCategory: (_, args, { cache }): null => {
             const { timer } = cache.readQuery({ query: GET_TIMER })
             const newTimerData = { ...timer, selectedCategoryId: args.categoryId }
             cache.writeQuery({ query: GET_TIMER, data: { timer: newTimerData } })

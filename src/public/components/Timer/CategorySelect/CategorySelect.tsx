@@ -1,7 +1,7 @@
 import React from 'react'
 export function CategorySelect({ selectedCategoryId, categories }) {
 
-  
+
   return (
     <select value={selectedCategoryId}>
       {categories.map(cat => (
