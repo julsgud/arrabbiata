@@ -7,7 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { Layout } from './Layout/Layout'
 import { Gatekeeper } from '../Gatekeeper/Gatekeeper'
 import { GET_TIMER } from '../../gql/queries/timer'
-import {TIMER_DIRECTION} from "../Timer/Timer.util";
+import { TIMER_DEFAULT_CATEGORY, TIMER_DIRECTION } from '../Timer/Timer.util'
 
 export const link = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -24,6 +24,12 @@ export function App() {
       link,
       resolvers: {
         Mutation: {
+          saveTimerCategory: (_, args, { cache }): null => {
+            const { timer } = cache.readQuery({ query: GET_TIMER })
+            const newTimerData = { ...timer, selectedCategoryId: args.categoryId }
+            cache.writeQuery({ query: GET_TIMER, data: { timer: newTimerData } })
+            return null
+          },
           stopTimer: (_, __, { cache }): null => {
             const { timer } = cache.readQuery({ query: GET_TIMER })
             const newTimerData = { ...timer, currentTimeInSeconds: 0, isRunning: false }
@@ -46,18 +52,19 @@ export function App() {
       },
     })
 
-    const timer = {
+    const defaultTimerObject = {
       id: '0',
       isTimerRunning: false,
       currentTimeInSeconds: 0,
       timerDirection: TIMER_DIRECTION.UP,
+      selectedCategoryId: TIMER_DEFAULT_CATEGORY,
       __typename: 'Timer',
     }
 
     cache.writeQuery({
       query: GET_TIMER,
       data: {
-        timer,
+        timer: defaultTimerObject,
       },
     })
 

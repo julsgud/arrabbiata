@@ -4,7 +4,9 @@ export const resolvers = {
   Query: {
     currentUser: (root, args, context) => context.user,
     userData: async (root, { userId }) => {
-      categories: await getCategoriesByUserId(userId)
+      return {
+        categories: await getCategoriesByUserId(userId),
+      }
     },
   },
   Mutation: {

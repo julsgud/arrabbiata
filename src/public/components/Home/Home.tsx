@@ -4,7 +4,6 @@ import {useCurrentUserData} from "../../hooks/useCurrentUserData";
 
 export function Home() {
   const user = useCurrentUserData()
-
   return (
     <>
       <div> Hey {user?.firstName || 'There'} </div>

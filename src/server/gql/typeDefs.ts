@@ -17,14 +17,15 @@ export const typeDefs = gql`
     createdAt: String
     description: String
   }
-  
+
   type Timer {
     id: ID!
     isTimerRunning: Boolean
     currentTimeInSeconds: Int
     timerDirection: TimerDirection
+    selectedCategoryId: String
   }
-  
+
   enum TimerDirection {
     UP
     DOWN

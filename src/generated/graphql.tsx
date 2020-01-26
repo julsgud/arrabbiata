@@ -65,6 +65,7 @@ export type Timer = {
   isTimerRunning?: Maybe<Scalars['Boolean']>,
   currentTimeInSeconds?: Maybe<Scalars['Int']>,
   timerDirection?: Maybe<TimerDirection>,
+  selectedCategoryId?: Maybe<Scalars['String']>,
 };
 
 export enum TimerDirection {
@@ -126,7 +127,7 @@ export type TimerQuery = (
   { __typename?: 'Query' }
   & { timer: (
     { __typename?: 'Timer' }
-    & Pick<Timer, 'id' | 'isTimerRunning' | 'currentTimeInSeconds' | 'timerDirection'>
+    & Pick<Timer, 'id' | 'isTimerRunning' | 'currentTimeInSeconds' | 'timerDirection' | 'selectedCategoryId'>
   ) }
 );
 
@@ -276,6 +277,7 @@ export type TimerResolvers<ContextType = any, ParentType extends ResolversParent
   isTimerRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   currentTimeInSeconds?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   timerDirection?: Resolver<Maybe<ResolversTypes['TimerDirection']>, ParentType, ContextType>,
+  selectedCategoryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -434,6 +436,7 @@ export const TimerDocument = gql`
     isTimerRunning
     currentTimeInSeconds
     timerDirection
+    selectedCategoryId
   }
 }
     `;

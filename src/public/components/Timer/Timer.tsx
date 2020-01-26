@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback } from 'react'
 import { secondsToMinutesSecondsFormat, TIMER_DIRECTION } from './Timer.util'
 import { useTimer } from '../../hooks/useTimer'
+import { CategorySelect } from './CategorySelect/CategorySelect'
 
 export const Timer = ({ user }) => {
   const {
@@ -10,20 +11,18 @@ export const Timer = ({ user }) => {
     setCurrentTime,
     currentTimeInSeconds,
     timerDirection,
+    selectedCategoryId,
   } = useTimer()
 
-  const resetTime = () => updateCurrentTime(0)
+  const resetTime = () => setCurrentTime(0)
 
-  const updateCurrentTime = useCallback(
-    newTime => {
-      if (timerDirection === TIMER_DIRECTION.UP) {
-        setCurrentTime(currentTimeInSeconds + 1)
-      } else {
-        setCurrentTime(currentTimeInSeconds - 1)
-      }
-    },
-    [currentTimeInSeconds]
-  )
+  const updateCurrentTime = useCallback(() => {
+    if (timerDirection === TIMER_DIRECTION.UP) {
+      setCurrentTime(currentTimeInSeconds + 1)
+    } else {
+      setCurrentTime(currentTimeInSeconds - 1)
+    }
+  }, [currentTimeInSeconds])
 
   useEffect(() => {
     let interval = 0
@@ -33,7 +32,7 @@ export const Timer = ({ user }) => {
         stopTimer()
         clearInterval(interval)
       } else {
-        interval = setInterval(() => updateCurrentTime(), 1000)
+        interval = setInterval(updateCurrentTime, 1000)
       }
     } else if (!isTimerRunning && currentTimeInSeconds !== 0) {
       clearInterval(interval)
@@ -46,16 +45,10 @@ export const Timer = ({ user }) => {
     <>
       {secondsToMinutesSecondsFormat(currentTimeInSeconds)}
       <br />
+      <CategorySelect selectedCategoryId={selectedCategoryId} categories={user.categories} />
+      <br />
       <button onClick={toggleIsRunning}>{isTimerRunning ? 'Pause' : 'Play'}</button>
-      <button
-        onClick={e => {
-          e.preventDefault()
-          resetTime()
-        }}
-      >
-        {' '}
-        Reset{' '}
-      </button>
+      <button onClick={resetTime}>Reset</button>
     </>
   )
 }

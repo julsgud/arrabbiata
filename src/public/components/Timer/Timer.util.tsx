@@ -19,3 +19,5 @@ export const TIMER_DIRECTION = {
   UP: 'UP',
   DOWN: 'DOWN'
 }
+
+export const TIMER_DEFAULT_CATEGORY = 'free'
