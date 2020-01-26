@@ -20,7 +20,7 @@ export type AuthPayload = {
 
 export type Category = {
    __typename?: 'Category',
-  id?: Maybe<Scalars['ID']>,
+  id: Scalars['ID'],
   categoryName?: Maybe<Scalars['String']>,
   userId?: Maybe<Scalars['String']>,
   createdAt?: Maybe<Scalars['String']>,
@@ -32,8 +32,8 @@ export type Mutation = {
   login?: Maybe<AuthPayload>,
   logout?: Maybe<Scalars['Boolean']>,
   setCurrentTime?: Maybe<Scalars['Boolean']>,
-  stopTimer?: Maybe<Scalars['Boolean']>,
   toggleIsRunning?: Maybe<Scalars['Boolean']>,
+  stopTimer?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -61,10 +61,16 @@ export type QueryUserDataArgs = {
 
 export type Timer = {
    __typename?: 'Timer',
-  id?: Maybe<Scalars['ID']>,
-  isRunning?: Maybe<Scalars['Boolean']>,
+  id: Scalars['ID'],
+  isTimerRunning?: Maybe<Scalars['Boolean']>,
   currentTimeInSeconds?: Maybe<Scalars['Int']>,
+  timerDirection?: Maybe<TimerDirection>,
 };
+
+export enum TimerDirection {
+  Up = 'UP',
+  Down = 'DOWN'
+}
 
 export type User = {
    __typename?: 'User',
@@ -119,7 +125,7 @@ export type TimerQuery = (
   { __typename?: 'Query' }
   & { timer: (
     { __typename?: 'Timer' }
-    & Pick<Timer, 'id' | 'isRunning' | 'currentTimeInSeconds'>
+    & Pick<Timer, 'id' | 'isTimerRunning' | 'currentTimeInSeconds' | 'timerDirection'>
   ) }
 );
 
@@ -215,6 +221,7 @@ export type ResolversTypes = {
   Timer: ResolverTypeWrapper<Timer>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
+  TimerDirection: TimerDirection,
   Mutation: ResolverTypeWrapper<{}>,
   AuthPayload: ResolverTypeWrapper<AuthPayload>,
 };
@@ -229,6 +236,7 @@ export type ResolversParentTypes = {
   Timer: Timer,
   Boolean: Scalars['Boolean'],
   Int: Scalars['Int'],
+  TimerDirection: TimerDirection,
   Mutation: {},
   AuthPayload: AuthPayload,
 };
@@ -238,7 +246,7 @@ export type AuthPayloadResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = {
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   categoryName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -249,8 +257,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   login?: Resolver<Maybe<ResolversTypes['AuthPayload']>, ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>,
   logout?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   setCurrentTime?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCurrentTimeArgs, 'timeInSeconds'>>,
-  stopTimer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   toggleIsRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  stopTimer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -260,9 +268,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type TimerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timer'] = ResolversParentTypes['Timer']> = {
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  isRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  isTimerRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   currentTimeInSeconds?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  timerDirection?: Resolver<Maybe<ResolversTypes['TimerDirection']>, ParentType, ContextType>,
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -417,8 +426,9 @@ export const TimerDocument = gql`
     query Timer {
   timer @client {
     id
-    isRunning
+    isTimerRunning
     currentTimeInSeconds
+    timerDirection
   }
 }
     `;

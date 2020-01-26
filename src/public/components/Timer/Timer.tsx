@@ -1,40 +1,52 @@
-import React, { useEffect, useCallback, useMemo, useState } from 'react'
-import {secondsToMinutesSecondsFormat, TIMER_DIRECTION} from './Timer.util'
+import React, { useEffect, useCallback } from 'react'
+import { secondsToMinutesSecondsFormat, TIMER_DIRECTION } from './Timer.util'
 import { useTimer } from '../../hooks/useTimer'
 
-export const Timer = ({ userData }) => {
-  const { isRunning, stopTimer, toggleIsRunning, setCurrentTime, currentTimeInSeconds } = useTimer()
+export const Timer = ({ user }) => {
+  const {
+    isTimerRunning,
+    stopTimer,
+    toggleIsRunning,
+    setCurrentTime,
+    currentTimeInSeconds,
+    timerDirection,
+  } = useTimer()
 
-  const updateCurrentTime = useCallback(newTime => {
-    if (timerDirection === TIMER_DIRECTION.UP) {
-      setCurrentTime(currentTimeInSeconds + 1)
-    } else {
+  const resetTime = () => updateCurrentTime(0)
 
-    }
-  })
+  const updateCurrentTime = useCallback(
+    newTime => {
+      if (timerDirection === TIMER_DIRECTION.UP) {
+        setCurrentTime(currentTimeInSeconds + 1)
+      } else {
+        setCurrentTime(currentTimeInSeconds - 1)
+      }
+    },
+    [currentTimeInSeconds]
+  )
 
   useEffect(() => {
     let interval = 0
 
-    if (isRunning) {
+    if (isTimerRunning) {
       if (currentTimeInSeconds === 20) {
         stopTimer()
         clearInterval(interval)
       } else {
         interval = setInterval(() => updateCurrentTime(), 1000)
       }
-    } else if (!isRunning && currentTimeInSeconds !== 0) {
+    } else if (!isTimerRunning && currentTimeInSeconds !== 0) {
       clearInterval(interval)
     }
 
     return () => clearInterval(interval)
-  }, [isRunning, currentTimeInSeconds])
+  }, [isTimerRunning, currentTimeInSeconds])
 
   return (
     <>
       {secondsToMinutesSecondsFormat(currentTimeInSeconds)}
       <br />
-      <button onClick={toggleIsRunning}>{isRunning ? 'Pause' : 'Play'}</button>
+      <button onClick={toggleIsRunning}>{isTimerRunning ? 'Pause' : 'Play'}</button>
       <button
         onClick={e => {
           e.preventDefault()

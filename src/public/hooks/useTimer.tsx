@@ -1,8 +1,8 @@
-import { useQuery } from '@apollo/react-hooks'
-import { GET_TIMER } from '../gql/queries/timer'
+import { useCallback } from 'react'
 import {
   useSetCurrentTimeMutation,
   useStopTimerMutation,
+  useTimerQuery,
   useToggleIsRunningMutation,
 } from '../../generated/graphql'
 
@@ -11,10 +11,22 @@ export function useTimer() {
     data: {
       timer: { isTimerRunning, currentTimeInSeconds, timerDirection },
     },
-  } = useQuery(GET_TIMER)
-  const [setCurrentTime] = useSetCurrentTimeMutation()
+  } = useTimerQuery()
+  const [setCurrentTimeMutation] = useSetCurrentTimeMutation()
   const [toggleIsRunning] = useToggleIsRunningMutation()
   const [stopTimer] = useStopTimerMutation()
 
-  return { isRunning, currentTimeInSeconds, setCurrentTime, toggleIsRunning, stopTimer }
+  const setCurrentTime = useCallback(
+    newTime => setCurrentTimeMutation({ variables: { timeInSeconds: newTime } }),
+    []
+  )
+
+  return {
+    isTimerRunning,
+    currentTimeInSeconds,
+    setCurrentTime,
+    toggleIsRunning,
+    stopTimer,
+    timerDirection,
+  }
 }

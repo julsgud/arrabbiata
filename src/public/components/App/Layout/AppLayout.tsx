@@ -5,7 +5,6 @@ import { UserDataFetcher } from '../../UserDataFetcher/UserDataFetcher'
 import { PrivateRoute } from './PrivateRoute/PrivateRoute'
 
 export function AppLayout() {
-  console.log('app layout')
   return (
     <UserDataFetcher>
       <Redirect from="/app" to="/app/home" exact />

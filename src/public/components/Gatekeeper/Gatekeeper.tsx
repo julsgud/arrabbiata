@@ -9,7 +9,7 @@ export function Gatekeeper({ children }) {
   if (loading) return <div>Loading</div>
   if (error) return <GqlError error={error}/>
 
-  const currentUser = data?.currentUser || {}
+  const currentUser = data?.currentUser || null
 
   return (
     <React.Fragment>

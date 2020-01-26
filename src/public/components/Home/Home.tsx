@@ -1,14 +1,15 @@
 import React from 'react'
 import { Timer } from '../Timer/Timer'
-import {useUserDataQuery} from "../../../generated/graphql";
+import {useCurrentUserData} from "../../hooks/useCurrentUserData";
 
 export function Home() {
-    const {data: {userData}} = useUserDataQuery()
+  const user = useCurrentUserData()
+
   return (
     <>
-      <div> Hey {userData?.firstName || 'There'} </div>
+      <div> Hey {user?.firstName || 'There'} </div>
       <div> Get to work! </div>
-      <Timer userData={userData}/>
+      <Timer user={user}/>
     </>
   )
 }

@@ -5,7 +5,6 @@ import { AuthLayout } from './AuthLayout'
 import {PrivateRoute} from "./PrivateRoute/PrivateRoute";
 
 export function Layout() {
-    console.log('layout rendering')
   return (
     <Switch>
       <Redirect from="/" to="/auth" exact />

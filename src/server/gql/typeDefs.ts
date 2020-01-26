@@ -30,7 +30,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    currentUser: User!
+    currentUser: User
     userData(userId: ID): [Category]!
     timer: Timer!
   }
@@ -42,5 +42,8 @@ export const typeDefs = gql`
   type Mutation {
     login(email: String!, password: String!): AuthPayload
     logout: Boolean
+    setCurrentTime(timeInSeconds: Int!): Boolean
+    toggleIsRunning: Boolean
+    stopTimer: Boolean
   }
 `

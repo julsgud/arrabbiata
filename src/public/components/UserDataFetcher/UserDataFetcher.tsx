@@ -4,9 +4,9 @@ import { GqlError } from '../GqlError/GqlError'
 
 export function UserDataFetcher({ children }) {
   const {
-    data: { user },
+    data: { currentUser },
   } = useCurrentUserQuery()
-  const { loading, error } = useUserDataQuery({ variables: { userId: user.id } })
+  const { loading, error } = useUserDataQuery({ variables: { userId: currentUser.id } })
 
   if (loading) return <div> Loading </div>
   if (error) return <GqlError error={error} />
