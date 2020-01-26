@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import update from 'immutability-helper'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { createHttpLink } from 'apollo-link-http'
@@ -6,7 +7,7 @@ import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { Layout } from './Layout/Layout'
 import { Gatekeeper } from '../Gatekeeper/Gatekeeper'
-import {GET_TIMER} from "../../gql/queries/timer";
+import { GET_TIMER } from '../../gql/queries/timer'
 
 export const link = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -29,9 +30,9 @@ export function App() {
             cache.writeQuery({ query: GET_TIMER, data: { timer: newTimerData } })
             return null
           },
-          setCurrentTimeInSeconds: (a, args, { cache }): null => {
+          setCurrentTime: (a, args, { cache }): null => {
             const { timer } = cache.readQuery({ query: GET_TIMER })
-            const newTimerData = { ...timer, currentTimeInSeconds: args.time }
+            const newTimerData = { ...timer, currentTimeInSeconds: args.timeInSeconds }
             cache.writeQuery({ query: GET_TIMER, data: { timer: newTimerData } })
             return null
           },
@@ -55,7 +56,7 @@ export function App() {
     cache.writeQuery({
       query: GET_TIMER,
       data: {
-        timer
+        timer,
       },
     })
 
@@ -63,6 +64,8 @@ export function App() {
   }, [])
 
   if (client === undefined) return <div>Loading...</div>
+
+  console.log('app rendering')
 
   return (
     <ApolloProvider client={client}>

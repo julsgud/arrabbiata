@@ -9,7 +9,6 @@ export const resolvers = {
     logout: (root, args, context) => context.logout,
     login: async (root, { email, password }, context) => {
       const { user } = await context.authenticate('graphql-local', { email, password })
-      console.log(user)
       context.login(user)
       return { user }
     },

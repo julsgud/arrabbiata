@@ -1,10 +1,11 @@
 import React from 'react'
-import { Redirect, Route } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { Home } from '../../Home/Home'
 import { UserDataFetcher } from '../../UserDataFetcher/UserDataFetcher'
 import { PrivateRoute } from './PrivateRoute/PrivateRoute'
 
 export function AppLayout() {
+  console.log('app layout')
   return (
     <UserDataFetcher>
       <Redirect from="/app" to="/app/home" exact />
