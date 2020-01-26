@@ -10,7 +10,7 @@ export const typeDefs = gql`
   }
 
   type Category {
-    id: ID
+    id: ID!
     categoryName: String
     userId: String
     createdAt: String
@@ -18,13 +18,19 @@ export const typeDefs = gql`
   }
   
   type Timer {
-    id: ID
-    isRunning: Boolean
+    id: ID!
+    isTimerRunning: Boolean
     currentTimeInSeconds: Int
+    timerDirection: TimerDirection
+  }
+  
+  enum TimerDirection {
+    UP
+    DOWN
   }
 
   type Query {
-    currentUser: User
+    currentUser: User!
     userData(userId: ID): [Category]!
     timer: Timer!
   }

@@ -1,14 +1,17 @@
 import React, { useEffect, useCallback, useMemo, useState } from 'react'
-import { secondsToMinutesSecondsFormat } from './Timer.util'
-import { useMutation, useQuery } from '@apollo/react-hooks'
-import { TOGGLE_IS_RUNNING } from '../../gql/mutations/toggleIsRunning'
-import { STOP_TIMER } from '../../gql/mutations/stopTimer'
-import { GET_TIMER } from '../../gql/queries/timer'
-import { INCREASE_TIME } from '../../gql/mutations/increaseTime'
-import { RESET_TIME } from '../../gql/mutations/resetTime'
+import {secondsToMinutesSecondsFormat, TIMER_DIRECTION} from './Timer.util'
+import { useTimer } from '../../hooks/useTimer'
 
-export const Timer = useMemo(() => {
+export const Timer = ({ userData }) => {
+  const { isRunning, stopTimer, toggleIsRunning, setCurrentTime, currentTimeInSeconds } = useTimer()
 
+  const updateCurrentTime = useCallback(newTime => {
+    if (timerDirection === TIMER_DIRECTION.UP) {
+      setCurrentTime(currentTimeInSeconds + 1)
+    } else {
+
+    }
+  })
 
   useEffect(() => {
     let interval = 0
@@ -18,25 +21,29 @@ export const Timer = useMemo(() => {
         stopTimer()
         clearInterval(interval)
       } else {
-        interval = setInterval(increaseTime, 1000)
+        interval = setInterval(() => updateCurrentTime(), 1000)
       }
     } else if (!isRunning && currentTimeInSeconds !== 0) {
       clearInterval(interval)
     }
 
     return () => clearInterval(interval)
-  }, [isRunning])
-
+  }, [isRunning, currentTimeInSeconds])
 
   return (
     <>
       {secondsToMinutesSecondsFormat(currentTimeInSeconds)}
       <br />
       <button onClick={toggleIsRunning}>{isRunning ? 'Pause' : 'Play'}</button>
-      <button onClick={e => {
-        e.preventDefault()
-        resetTime()
-      }}> Reset </button>
+      <button
+        onClick={e => {
+          e.preventDefault()
+          resetTime()
+        }}
+      >
+        {' '}
+        Reset{' '}
+      </button>
     </>
   )
-})
+}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import update from 'immutability-helper'
 import { BrowserRouter as Router } from 'react-router-dom'
 import { ApolloProvider } from '@apollo/react-hooks'
 import { createHttpLink } from 'apollo-link-http'
@@ -8,6 +7,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { Layout } from './Layout/Layout'
 import { Gatekeeper } from '../Gatekeeper/Gatekeeper'
 import { GET_TIMER } from '../../gql/queries/timer'
+import {TIMER_DIRECTION} from "../Timer/Timer.util";
 
 export const link = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -48,8 +48,9 @@ export function App() {
 
     const timer = {
       id: '0',
-      isRunning: false,
+      isTimerRunning: false,
       currentTimeInSeconds: 0,
+      timerDirection: TIMER_DIRECTION.UP,
       __typename: 'Timer',
     }
 
@@ -64,8 +65,6 @@ export function App() {
   }, [])
 
   if (client === undefined) return <div>Loading...</div>
-
-  console.log('app rendering')
 
   return (
     <ApolloProvider client={client}>

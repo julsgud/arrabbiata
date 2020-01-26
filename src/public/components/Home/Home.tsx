@@ -1,17 +1,14 @@
-import React, { useContext } from 'react'
-import { UserContext } from '../../contexts/UserContext'
+import React from 'react'
 import { Timer } from '../Timer/Timer'
+import {useUserDataQuery} from "../../../generated/graphql";
 
 export function Home() {
-    console.log('home')
-  // const { user } = useContext(UserContext)
-    const user = 'oho'
-
+    const {data: {userData}} = useUserDataQuery()
   return (
     <>
-      <div> Hey {user?.firstName || 'There'} </div>
+      <div> Hey {userData?.firstName || 'There'} </div>
       <div> Get to work! </div>
-      <Timer />
+      <Timer userData={userData}/>
     </>
   )
 }

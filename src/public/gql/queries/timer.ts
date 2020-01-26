@@ -4,8 +4,9 @@ export const GET_TIMER = gql`
   query Timer {
     timer @client {
       id
-      isRunning
+      isTimerRunning
       currentTimeInSeconds
+      timerDirection
     }
   }
 `

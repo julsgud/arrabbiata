@@ -14,3 +14,8 @@ export function formatMinutesForTimeDisplay(number: number) {
   if (!number) return '0'
   return `${number.toString()}`
 }
+
+export const TIMER_DIRECTION = {
+  UP: 'UP',
+  DOWN: 'DOWN'
+}

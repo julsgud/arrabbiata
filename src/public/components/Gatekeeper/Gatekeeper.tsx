@@ -5,7 +5,6 @@ import {GqlError} from "../GqlError/GqlError";
 
 export function Gatekeeper({ children }) {
   const { loading, error, data } = useCurrentUserQuery()
-    console.log('gatekeeper')
 
   if (loading) return <div>Loading</div>
   if (error) return <GqlError error={error}/>
