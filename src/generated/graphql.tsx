@@ -50,7 +50,7 @@ export type MutationSetCurrentTimeArgs = {
 export type Query = {
    __typename?: 'Query',
   currentUser?: Maybe<User>,
-  userData: Array<Maybe<Category>>,
+  userData?: Maybe<User>,
   timer: Timer,
 };
 
@@ -79,6 +79,7 @@ export type User = {
   firstName?: Maybe<Scalars['String']>,
   lastName?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
+  categories?: Maybe<Array<Maybe<Category>>>,
 };
 
 export type SetCurrentTimeMutationVariables = {
@@ -136,10 +137,13 @@ export type UserDataQueryVariables = {
 
 export type UserDataQuery = (
   { __typename?: 'Query' }
-  & { userData: Array<Maybe<(
-    { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'categoryName' | 'createdAt' | 'description'>
-  )>> }
+  & { userData: Maybe<(
+    { __typename?: 'User' }
+    & { categories: Maybe<Array<Maybe<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'categoryName' | 'createdAt' | 'description'>
+    )>>> }
+  )> }
 );
 
 
@@ -263,7 +267,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   currentUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  userData?: Resolver<Array<Maybe<ResolversTypes['Category']>>, ParentType, ContextType, QueryUserDataArgs>,
+  userData?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, QueryUserDataArgs>,
   timer?: Resolver<ResolversTypes['Timer'], ParentType, ContextType>,
 };
 
@@ -280,6 +284,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['Category']>>>, ParentType, ContextType>,
 };
 
 export type Resolvers<ContextType = any> = {
@@ -460,10 +465,12 @@ export type TimerQueryResult = ApolloReactCommon.QueryResult<TimerQuery, TimerQu
 export const UserDataDocument = gql`
     query UserData($userId: ID!) {
   userData(userId: $userId) {
-    id
-    categoryName
-    createdAt
-    description
+    categories {
+      id
+      categoryName
+      createdAt
+      description
+    }
   }
 }
     `;

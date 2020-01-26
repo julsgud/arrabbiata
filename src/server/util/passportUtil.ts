@@ -1,8 +1,10 @@
+import { User } from '../../generated/graphql'
+
 require('dotenv').config()
 import passport from 'passport'
 import GoogleStrategy from 'passport-google-oauth'
 import to from 'await-to-js'
-import { getUserByEmail, getUserById, User } from '../daos/user/userDao'
+import { getUserByEmail, getUserById } from '../daos/user/userDao'
 
 export const googleAuthOptions = {
   clientID: process.env.GOOGLE_AUTH_CLIENT_ID,

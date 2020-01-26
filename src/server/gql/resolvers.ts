@@ -3,7 +3,9 @@ import { getCategoriesByUserId } from '../daos/category/categoryDao'
 export const resolvers = {
   Query: {
     currentUser: (root, args, context) => context.user,
-    userData: async (root, { userId }) => await getCategoriesByUserId(userId),
+    userData: async (root, { userId }) => {
+      categories: await getCategoriesByUserId(userId)
+    },
   },
   Mutation: {
     logout: (root, args, context) => context.logout,

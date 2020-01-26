@@ -7,6 +7,7 @@ export const typeDefs = gql`
     firstName: String
     lastName: String
     email: String
+    categories: [Category]
   }
 
   type Category {
@@ -31,7 +32,7 @@ export const typeDefs = gql`
 
   type Query {
     currentUser: User
-    userData(userId: ID): [Category]!
+    userData(userId: ID): User
     timer: Timer!
   }
 
