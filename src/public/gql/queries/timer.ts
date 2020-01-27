@@ -8,6 +8,7 @@ export const GET_TIMER = gql`
       currentTimeInSeconds
       timerDirection
       selectedCategoryId
+      timeLimitInSeconds
     }
   }
 `

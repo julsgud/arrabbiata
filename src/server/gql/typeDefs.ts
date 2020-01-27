@@ -24,6 +24,7 @@ export const typeDefs = gql`
     currentTimeInSeconds: Int
     timerDirection: TimerDirection
     selectedCategoryId: String
+    timeLimitInSeconds: Int
   }
 
   enum TimerDirection {

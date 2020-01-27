@@ -9,7 +9,13 @@ import {
 export function useTimer() {
   const {
     data: {
-      timer: { isTimerRunning, currentTimeInSeconds, timerDirection, selectedCategoryId },
+      timer: {
+        isTimerRunning,
+        currentTimeInSeconds,
+        timerDirection,
+        selectedCategoryId,
+        timeLimitInSeconds,
+      },
     },
   } = useTimerQuery()
   const [setCurrentTimeMutation] = useSetCurrentTimeMutation()
@@ -26,6 +32,7 @@ export function useTimer() {
     selectedCategoryId,
     currentTimeInSeconds,
     setCurrentTime,
+    timeLimitInSeconds,
     toggleIsRunning,
     stopTimer,
     timerDirection,
