@@ -26,14 +26,14 @@ export const typeDefs = gql`
     selectedCategoryId: String
     timeLimitInSeconds: Int
   }
-  
+
   type Cycle {
     id: ID
     lengthInSeconds: Int
     userId: ID
     createdAt: String
-    categoryIds: [ID]
-    taskIds: [ID]
+    categoryIds: [String]
+    taskIds: [String]
   }
 
   enum TimerDirection {
@@ -59,6 +59,13 @@ export const typeDefs = gql`
     stopTimer: Boolean
     setCycleCategory(categoryId: String!): Boolean
     setTimeLimit(timeLimit: Int!): Boolean
-      saveCycle(cycle: Cycle)
+    saveCycle(
+      id: ID!
+      lengthInSeconds: Int!
+      userId: String!
+      createdAt: String!
+      categoryIds: [String]!
+      taskIds: [String]!
+    ): Cycle
   }
 `

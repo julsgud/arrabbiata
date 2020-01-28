@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import {
+  useSaveCycleMutation,
   useSetCurrentTimeMutation,
   useStopTimerMutation,
   useTimerQuery,
@@ -22,6 +23,7 @@ export function useTimer() {
   const [setCurrentTimeMutation] = useSetCurrentTimeMutation()
   const [toggleIsRunning] = useToggleIsRunningMutation()
   const [stopTimer] = useStopTimerMutation()
+  const [saveCycle] = useSaveCycleMutation()
 
   const setCurrentTime = useCallback(
     newTime => setCurrentTimeMutation({ variables: { timeInSeconds: newTime } }),
@@ -37,5 +39,6 @@ export function useTimer() {
     toggleIsRunning,
     stopTimer,
     timerDirection,
+    saveCycle
   }
 }

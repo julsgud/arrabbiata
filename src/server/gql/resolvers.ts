@@ -1,4 +1,5 @@
 import { getCategoriesByUserId } from '../daos/category/categoryDao'
+import { createCycle } from '../daos/cycle/cycleDao'
 
 export const resolvers = {
   Query: {
@@ -15,6 +16,13 @@ export const resolvers = {
       const { user } = await context.authenticate('graphql-local', { email, password })
       context.login(user)
       return { user }
+    },
+    saveCycle: async (
+      root,
+      { id, lengthInSeconds, userId, createdAt, categoryIds, taskIds },
+      context
+    ) => {
+      return await createCycle(id, lengthInSeconds, userId, createdAt, categoryIds, taskIds)
     },
   },
 }

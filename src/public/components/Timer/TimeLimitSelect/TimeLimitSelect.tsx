@@ -7,7 +7,7 @@ interface TimeLimitSelectProps {
   timeLimitInSeconds: number
 }
 
-export const TimeLimitSelect: React.FC<TiwmeLimitSelectProps> = ({ timeLimitInSeconds }) => {
+export const TimeLimitSelect: React.FC<TimeLimitSelectProps> = ({ timeLimitInSeconds }) => {
   const [setTimeLimit] = useSetTimeLimitMutation()
 
   return (
