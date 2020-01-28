@@ -29,6 +29,8 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
     saveCycle,
   } = useTimer()
 
+  const resetTime = () => setCurrentTime(0)
+
   const updateCurrentTime = useCallback(() => {
     if (timerDirection !== TIMER_DIRECTION.UP) {
       setCurrentTime(currentTimeInSeconds - 1)

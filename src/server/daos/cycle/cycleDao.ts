@@ -13,7 +13,6 @@ export async function createCycle(id, lengthInSeconds, userId, createdAt, catego
     taskIds,
   }
   const [err, response] = await to(createDocumentOnCollection(CYCLE_COLLECTION, { data: cycle }))
-  console.log(response)
-  if (err) return throwError('Error creating cycle.')
-  return response
+  if (err) throwError(err)
+  return response && response.data
 }
