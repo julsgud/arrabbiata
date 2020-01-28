@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === 'production') {
 // for production use, cookie: { secure: true }
 const SESSION_SECRECT = 'bad secret'
 const sessionOptions = {
-  genid: (req: any) => uuid(),
+  genid: () => uuid(),
   secret: SESSION_SECRECT,
   resave: false,
   saveUninitialized: false,

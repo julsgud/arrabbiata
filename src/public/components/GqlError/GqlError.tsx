@@ -1,6 +1,10 @@
 import React from 'react'
 import { getMessageOutOfGraphqlError } from '../../util/errorUtil'
 
-export function GqlError({ error }) {
-  return <div> `Error: ${getMessageOutOfGraphqlError(error)}` </div>
+interface GQLErrorProps {
+  error: Error
+}
+
+export const GQLError: React.FC<GQLErrorProps> = ({ error }) => {
+  return <> `Error: ${getMessageOutOfGraphqlError(error)}` </>
 }

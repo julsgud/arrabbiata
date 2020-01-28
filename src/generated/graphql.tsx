@@ -35,6 +35,7 @@ export type Mutation = {
   toggleIsRunning?: Maybe<Scalars['Boolean']>,
   stopTimer?: Maybe<Scalars['Boolean']>,
   setCycleCategory?: Maybe<Scalars['Boolean']>,
+  setTimeLimit?: Maybe<Scalars['Boolean']>,
 };
 
 
@@ -51,6 +52,11 @@ export type MutationSetCurrentTimeArgs = {
 
 export type MutationSetCycleCategoryArgs = {
   categoryId: Scalars['String']
+};
+
+
+export type MutationSetTimeLimitArgs = {
+  timeLimit: Scalars['Int']
 };
 
 export type Query = {
@@ -72,6 +78,7 @@ export type Timer = {
   currentTimeInSeconds?: Maybe<Scalars['Int']>,
   timerDirection?: Maybe<TimerDirection>,
   selectedCategoryId?: Maybe<Scalars['String']>,
+  timeLimitInSeconds?: Maybe<Scalars['Int']>,
 };
 
 export enum TimerDirection {
@@ -109,6 +116,16 @@ export type SetCycleCategoryMutation = (
   & Pick<Mutation, 'setCycleCategory'>
 );
 
+export type SetTimeLimitMutationVariables = {
+  timeLimit: Scalars['Int']
+};
+
+
+export type SetTimeLimitMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'setTimeLimit'>
+);
+
 export type StopTimerMutationVariables = {};
 
 
@@ -143,7 +160,7 @@ export type TimerQuery = (
   { __typename?: 'Query' }
   & { timer: (
     { __typename?: 'Timer' }
-    & Pick<Timer, 'id' | 'isTimerRunning' | 'currentTimeInSeconds' | 'timerDirection' | 'selectedCategoryId'>
+    & Pick<Timer, 'id' | 'isTimerRunning' | 'currentTimeInSeconds' | 'timerDirection' | 'selectedCategoryId' | 'timeLimitInSeconds'>
   ) }
 );
 
@@ -281,6 +298,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   toggleIsRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   stopTimer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   setCycleCategory?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCycleCategoryArgs, 'categoryId'>>,
+  setTimeLimit?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetTimeLimitArgs, 'timeLimit'>>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -295,6 +313,7 @@ export type TimerResolvers<ContextType = any, ParentType extends ResolversParent
   currentTimeInSeconds?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   timerDirection?: Resolver<Maybe<ResolversTypes['TimerDirection']>, ParentType, ContextType>,
   selectedCategoryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  timeLimitInSeconds?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
@@ -383,6 +402,36 @@ export function useSetCycleCategoryMutation(baseOptions?: ApolloReactHooks.Mutat
 export type SetCycleCategoryMutationHookResult = ReturnType<typeof useSetCycleCategoryMutation>;
 export type SetCycleCategoryMutationResult = ApolloReactCommon.MutationResult<SetCycleCategoryMutation>;
 export type SetCycleCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<SetCycleCategoryMutation, SetCycleCategoryMutationVariables>;
+export const SetTimeLimitDocument = gql`
+    mutation SetTimeLimit($timeLimit: Int!) {
+  setTimeLimit(timeLimit: $timeLimit) @client
+}
+    `;
+export type SetTimeLimitMutationFn = ApolloReactCommon.MutationFunction<SetTimeLimitMutation, SetTimeLimitMutationVariables>;
+
+/**
+ * __useSetTimeLimitMutation__
+ *
+ * To run a mutation, you first call `useSetTimeLimitMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetTimeLimitMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setTimeLimitMutation, { data, loading, error }] = useSetTimeLimitMutation({
+ *   variables: {
+ *      timeLimit: // value for 'timeLimit'
+ *   },
+ * });
+ */
+export function useSetTimeLimitMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetTimeLimitMutation, SetTimeLimitMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetTimeLimitMutation, SetTimeLimitMutationVariables>(SetTimeLimitDocument, baseOptions);
+      }
+export type SetTimeLimitMutationHookResult = ReturnType<typeof useSetTimeLimitMutation>;
+export type SetTimeLimitMutationResult = ApolloReactCommon.MutationResult<SetTimeLimitMutation>;
+export type SetTimeLimitMutationOptions = ApolloReactCommon.BaseMutationOptions<SetTimeLimitMutation, SetTimeLimitMutationVariables>;
 export const StopTimerDocument = gql`
     mutation StopTimer {
   stopTimer @client
@@ -484,6 +533,7 @@ export const TimerDocument = gql`
     currentTimeInSeconds
     timerDirection
     selectedCategoryId
+    timeLimitInSeconds
   }
 }
     `;

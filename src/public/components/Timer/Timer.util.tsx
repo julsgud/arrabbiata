@@ -22,19 +22,44 @@ export const TIMER_DIRECTION = {
   DOWN: 'DOWN',
 }
 
-export const TIMER_LIMITS_IN_SECONDS = {
-  THIRTY_MINUTES: 1800,
-  ONE_HOUR: 3600,
-  HOUR_AND_A_HALF: 5400,
-  TWO_HOURS: 7200,
-  TWO_HOURS_AND_A_HALF: 9000,
-  THREE_HOURS: 10800,
-  NONE: 86400,
-}
+export const TIMER_LIMITS_IN_SECONDS = [
+  {
+    label: '30 mins',
+    value: 1800,
+  },
+  {
+    label: '1 hour',
+    value: 3600,
+  },
+  {
+    label: '1.5 hours',
+    value: 5400,
+  },
+  {
+    label: '2 hours',
+    value: 7200,
+  },
+  {
+    label: '2.5 hours',
+    value: 9000,
+  },
+  {
+    label: '3 hours',
+    value: 10800,
+  },
+  {
+    label: 'none',
+    value: 86400,
+  },
+]
 
 export const TIMER_DEFAULT_CATEGORY = 'free'
 
-export function isTimerDone(timeLimit: number, currentTime: number, timerDirection: TimerDirection): Boolean {
+export function isTimerDone(
+  timeLimit: number,
+  currentTime: number,
+  timerDirection: TimerDirection
+): Boolean {
   if (timerDirection === TIMER_DIRECTION.UP) {
     return timeLimit === currentTime
   } else {
@@ -42,10 +67,25 @@ export function isTimerDone(timeLimit: number, currentTime: number, timerDirecti
   }
 }
 
-export function isTimerPaused(timeLimit: number, isTimerRunning: boolean, currentTimeInSeconds: number, timerDirection: TimerDirection): Boolean {
+export function isTimerPaused(
+  timeLimit: number,
+  isTimerRunning: boolean,
+  currentTimeInSeconds: number,
+  timerDirection: TimerDirection
+): Boolean {
   if (timerDirection === TIMER_DIRECTION.UP) {
     return !isTimerRunning && currentTimeInSeconds !== 0
   } else {
     return !isTimerRunning && currentTimeInSeconds !== timeLimit
   }
+}
+
+export const DEFAULT_TIMER_OBJECT = {
+  id: '0',
+  isTimerRunning: false,
+  currentTimeInSeconds: 0,
+  timerDirection: TIMER_DIRECTION.UP,
+  selectedCategoryId: TIMER_DEFAULT_CATEGORY,
+  timeLimitInSeconds: TIMER_LIMITS_IN_SECONDS[TIMER_LIMITS_IN_SECONDS.length - 1],
+  __typename: 'Timer',
 }

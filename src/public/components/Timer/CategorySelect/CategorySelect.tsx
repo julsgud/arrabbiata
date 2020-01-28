@@ -1,10 +1,25 @@
 import React from 'react'
-import { useSetCycleCategoryMutation } from '../../../../generated/graphql'
-export function CategorySelect({ selectedCategoryId, categories }) {
+import styled from 'styled-components'
+import { Category, useSetCycleCategoryMutation } from '../../../../generated/graphql'
+
+interface CategorySelectProps {
+  selectedCategoryId: string
+  categories?: Category[]
+}
+
+export const Row = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+`
+
+export const CategorySelect: React.FC<CategorySelectProps> = ({
+  selectedCategoryId,
+  categories = [],
+}) => {
   const [setCycleCategory] = useSetCycleCategoryMutation()
 
   return (
-    <>
+    <Row>
       <div> Category </div>
       <select
         value={selectedCategoryId}
@@ -12,13 +27,14 @@ export function CategorySelect({ selectedCategoryId, categories }) {
           return setCycleCategory({ variables: { categoryId: e.target.value } })
         }}
       >
-        {categories.map(cat => (
-          <option key={cat.id} value={cat.id}>
-            {cat.categoryName}
-          </option>
-        ))}
+        {categories.length &&
+          categories.map((cat: Category) => (
+            <option key={cat.id} value={cat.id}>
+              {cat.categoryName}
+            </option>
+          ))}
         <option value="free">Free</option>
       </select>
-    </>
+    </Row>
   )
 }

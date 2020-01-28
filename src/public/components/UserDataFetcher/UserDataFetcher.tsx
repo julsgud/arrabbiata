@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { useCurrentUserQuery, useUserDataQuery } from '../../../generated/graphql'
-import { GqlError } from '../GqlError/GqlError'
+import { GQLError } from '../GqlError/GqlError'
 
-export function UserDataFetcher({ children }) {
+interface UserDataFetcherProps {
+  children: ReactNode
+}
+
+export const UserDataFetcher: React.FC<UserDataFetcherProps> = ({ children }) => {
   const {
+    // @ts-ignore
     data: { currentUser },
   } = useCurrentUserQuery()
   const { loading, error } = useUserDataQuery({ variables: { userId: currentUser.id } })
 
   if (loading) return <div> Loading </div>
-  if (error) return <GqlError error={error} />
+  if (error) return <GQLError error={error} />
 
   return <>{children}</>
 }

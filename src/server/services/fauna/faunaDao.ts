@@ -12,3 +12,7 @@ export function getDocumentsOnIndexById(index: string, id: string): Promise<any>
     )
   )
 }
+
+export interface FaunaResult {
+  data: Array<object>
+}

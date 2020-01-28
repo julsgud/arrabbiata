@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 export const typeDefs = gql`
   type User {
-    id: ID
+    id: ID!
     googleId: String
     firstName: String
     lastName: String
@@ -25,6 +25,15 @@ export const typeDefs = gql`
     timerDirection: TimerDirection
     selectedCategoryId: String
     timeLimitInSeconds: Int
+  }
+  
+  type Cycle {
+    id: ID
+    lengthInSeconds: Int
+    userId: ID
+    createdAt: String
+    categoryIds: [ID]
+    taskIds: [ID]
   }
 
   enum TimerDirection {
@@ -49,5 +58,7 @@ export const typeDefs = gql`
     toggleIsRunning: Boolean
     stopTimer: Boolean
     setCycleCategory(categoryId: String!): Boolean
+    setTimeLimit(timeLimit: Int!): Boolean
+      saveCycle(cycle: Cycle)
   }
 `

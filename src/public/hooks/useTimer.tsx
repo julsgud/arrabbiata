@@ -9,6 +9,7 @@ import {
 export function useTimer() {
   const {
     data: {
+      // @ts-ignore
       timer: {
         isTimerRunning,
         currentTimeInSeconds,
