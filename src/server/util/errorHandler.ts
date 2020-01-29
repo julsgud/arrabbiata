@@ -1,3 +1,3 @@
 export function throwError(error) {
-    throw new Error(error)
+  return new Error(error)
 }
