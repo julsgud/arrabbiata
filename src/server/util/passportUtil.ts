@@ -13,17 +13,12 @@ export const googleAuthOptions: IOAuth2StrategyOption = {
 
 // @ts-ignore
 export async function googleAuthCallback(accessToken, refreshToken, profile, done) {
-  console.log(profile)
   const userEmail = (profile.emails && profile.emails[0] && profile.emails[0].value) || null
-
   if (!userEmail) {
     done(new Error('User not found'), null)
   }
 
-  console.log(userEmail)
   const [err, user] = await to(getUserByEmail(userEmail))
-
-  console.log(err)
   if (err) {
     done('No user registered with that email', null)
     return
