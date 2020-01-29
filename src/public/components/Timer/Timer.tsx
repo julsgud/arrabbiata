@@ -1,6 +1,4 @@
 import React, { useEffect, useCallback } from 'react'
-import uuid from 'uuid'
-import moment from 'moment'
 import {
   isTimerDone,
   isTimerPaused,
@@ -69,23 +67,7 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
         {isTimerRunning ? 'Pause' : currentTimeInSeconds === 0 ? 'Start' : 'Continue'}
       </button>
       <button onClick={resetTime}>Reset</button>
-      {currentTimeInSeconds !== 0 && (
-        <button
-          onClick={() => {
-            const cycle = {
-              id: uuid.v4(),
-              lengthInSeconds: currentTimeInSeconds,
-              userId: user.id,
-              createdAt: moment().toISOString(),
-              categoryIds: [selectedCategoryId],
-              taskIds: [],
-            }
-            return saveCycle({ variables: { ...cycle } })
-          }}
-        >
-          End
-        </button>
-      )}
+      {currentTimeInSeconds !== 0 && <button onClick={() => saveCycle(user.id)}>End</button>}
     </>
   )
 }

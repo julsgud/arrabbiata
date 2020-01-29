@@ -1,3 +1,5 @@
+import { mongoDbClient } from './services/mongodb/mongodb'
+
 require('dotenv').config()
 import express from 'express'
 import path from 'path'
@@ -68,3 +70,14 @@ app.use(
 
 app.listen(process.env.API_PORT)
 console.log(`👅 GraphQL API at http://localhost:${process.env.API_PORT}/graphql`)
+
+function gracefulShutdown() {
+  mongoDbClient.close(() => {
+    console.log('')
+  })
+}
+
+process.on('exit', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+process.on('SIGTERM', gracefulShutdown);
+process.on('uncaughtException', gracefulShutdown);
