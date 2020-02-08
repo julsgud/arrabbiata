@@ -75,9 +75,9 @@ function gracefulShutdown(processName) {
   console.log(processName)
   mongoDbClient.close(() => console.log('Closed mongo db connection'))
   server.close()
+  process.exit()
 }
 
 process.on('exit', gracefulShutdown)
 process.on('SIGINT', gracefulShutdown)
 process.on('SIGTERM', gracefulShutdown)
-process.on('uncaughtException', gracefulShutdown)

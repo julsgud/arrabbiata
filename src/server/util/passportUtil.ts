@@ -46,7 +46,8 @@ export function runPassport() {
   })
 
   passport.deserializeUser(async (id: string, done) => {
-    const user = await getUserById(id)
+    const [err, user] = await to(getUserById(id))
+    if (err) throw new Error(err)
     done(null, user)
   })
 

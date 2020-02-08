@@ -3,7 +3,11 @@ import { throwError } from '../../util/errorHandler'
 import { USERS_BY_EMAIL_INDEX, USERS_BY_ID_INDEX } from '../../services/fauna/indexNames'
 import { getFirstDocumentOnIndexById } from '../../services/fauna/faunaDao'
 import { User } from '../../../generated/graphql'
-import { getOneDocumentFromCollectionByField } from '../../services/mongodb/mongoDao'
+import {
+  getDocumentFromCollectionById,
+  getFirstDocumentFromCollectionByField,
+} from '../../services/mongodb/mongoDao'
+
 
 export async function getUserByEmailFromFauna(email: string): Promise<User | Error> {
   const [err, response] = await to(getFirstDocumentOnIndexById(USERS_BY_EMAIL_INDEX, email))
@@ -11,15 +15,21 @@ export async function getUserByEmailFromFauna(email: string): Promise<User | Err
   return response && response.data
 }
 
-export async function getUserById(userId: string): Promise<User | Error> {
+export async function getUserByIdFromFauna(userId: string): Promise<User | Error> {
   const [err, response] = await to(getFirstDocumentOnIndexById(USERS_BY_ID_INDEX, userId))
   if (err) throwError(err)
   return response.data
 }
 
-export async function getUserByEmail(email: string): Promise<User | Error> {
-  const [err, response] = await to(getOneDocumentFromCollectionByField('users', 'email', email))
+export async function getUserById(userId: string): Promise<User | Error> {
+  const [err, response] = await to(getDocumentFromCollectionById('users', userId))
+  console.log(err, response)
   if (err) return new Error(err)
-  console.log(response)
+  return response
+}
+
+export async function getUserByEmail(email: string): Promise<User | Error> {
+  const [err, response] = await to(getFirstDocumentFromCollectionByField('users', 'email', email))
+  if (err) return new Error(err)
   return response
 }
