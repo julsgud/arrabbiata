@@ -48,6 +48,7 @@ export type Mutation = {
   setCycleCategory?: Maybe<Scalars['Boolean']>,
   setCycleTask?: Maybe<Scalars['Boolean']>,
   setTimeLimit?: Maybe<Scalars['Boolean']>,
+  updateNotes?: Maybe<Scalars['Boolean']>,
   saveCycle?: Maybe<Cycle>,
 };
 
@@ -75,6 +76,11 @@ export type MutationSetCycleTaskArgs = {
 
 export type MutationSetTimeLimitArgs = {
   timeLimit: Scalars['Int']
+};
+
+
+export type MutationUpdateNotesArgs = {
+  updatedNotes: Scalars['String']
 };
 
 
@@ -207,6 +213,16 @@ export type ToggleIsRunningMutationVariables = {};
 export type ToggleIsRunningMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'toggleIsRunning'>
+);
+
+export type UpdateNotesMutationVariables = {
+  updatedNotes: Scalars['String']
+};
+
+
+export type UpdateNotesMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'updateNotes'>
 );
 
 export type CurrentUserQueryVariables = {};
@@ -384,6 +400,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   setCycleCategory?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCycleCategoryArgs, 'categoryId'>>,
   setCycleTask?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCycleTaskArgs, 'taskId'>>,
   setTimeLimit?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetTimeLimitArgs, 'timeLimit'>>,
+  updateNotes?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateNotesArgs, 'updatedNotes'>>,
   saveCycle?: Resolver<Maybe<ResolversTypes['Cycle']>, ParentType, ContextType, RequireFields<MutationSaveCycleArgs, 'id' | 'lengthInSeconds' | 'userId' | 'createdAt' | 'categoryIds' | 'taskIds'>>,
 };
 
@@ -655,6 +672,36 @@ export function useToggleIsRunningMutation(baseOptions?: ApolloReactHooks.Mutati
 export type ToggleIsRunningMutationHookResult = ReturnType<typeof useToggleIsRunningMutation>;
 export type ToggleIsRunningMutationResult = ApolloReactCommon.MutationResult<ToggleIsRunningMutation>;
 export type ToggleIsRunningMutationOptions = ApolloReactCommon.BaseMutationOptions<ToggleIsRunningMutation, ToggleIsRunningMutationVariables>;
+export const UpdateNotesDocument = gql`
+    mutation UpdateNotes($updatedNotes: String!) {
+  updateNotes(updatedNotes: $updatedNotes) @client
+}
+    `;
+export type UpdateNotesMutationFn = ApolloReactCommon.MutationFunction<UpdateNotesMutation, UpdateNotesMutationVariables>;
+
+/**
+ * __useUpdateNotesMutation__
+ *
+ * To run a mutation, you first call `useUpdateNotesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateNotesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateNotesMutation, { data, loading, error }] = useUpdateNotesMutation({
+ *   variables: {
+ *      updatedNotes: // value for 'updatedNotes'
+ *   },
+ * });
+ */
+export function useUpdateNotesMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateNotesMutation, UpdateNotesMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateNotesMutation, UpdateNotesMutationVariables>(UpdateNotesDocument, baseOptions);
+      }
+export type UpdateNotesMutationHookResult = ReturnType<typeof useUpdateNotesMutation>;
+export type UpdateNotesMutationResult = ApolloReactCommon.MutationResult<UpdateNotesMutation>;
+export type UpdateNotesMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateNotesMutation, UpdateNotesMutationVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {

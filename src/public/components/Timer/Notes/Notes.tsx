@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useMutation } from '@apollo/react-hooks'
 
 interface NotesProps {
   notes: string
