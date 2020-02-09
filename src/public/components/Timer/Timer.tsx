@@ -9,6 +9,7 @@ import { useTimer } from '../../hooks/useTimer'
 import { CategorySelect } from './CategorySelect/CategorySelect'
 import { User } from '../../../generated/graphql'
 import { TimeLimitSelect } from './TimeLimitSelect/TimeLimitSelect'
+import { TaskSelect } from './TaskSelect/TaskSelect'
 
 interface TimerProps {
   user: User
@@ -24,6 +25,7 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
     timeLimitInSeconds,
     timerDirection,
     selectedCategoryId,
+    selectedTaskId,
     saveCycle,
   } = useTimer()
 
@@ -61,6 +63,7 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
       {secondsToMinutesSecondsFormat(currentTimeInSeconds)}
       <br />
       <CategorySelect selectedCategoryId={selectedCategoryId} categories={user.categories} />
+      <TaskSelect selectedTaskId={selectedTaskId} tasks={user.tasks} />
       <TimeLimitSelect timeLimitInSeconds={timeLimitInSeconds} />
       <br />
       <button onClick={() => toggleIsRunning()}>

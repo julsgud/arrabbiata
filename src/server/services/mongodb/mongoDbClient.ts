@@ -8,7 +8,13 @@ export const mongoDbClient = new MongoClient(uri, {
 })
 
 export let mongoDb
-mongoDbClient.connect(async () => {
-  mongoDb = await mongoDbClient.db('Project0')
-  console.log('🌿 MongoDB: Connected')
-})
+mongoDbClient
+  .connect()
+  .then(async () => {
+    mongoDb = await mongoDbClient.db('Project0')
+    console.log('🌿 MongoDB: Connected')
+  })
+  .catch(err => {
+    console.log(err)
+  })
+

@@ -18,6 +18,7 @@ export function useTimer() {
         currentTimeInSeconds,
         timerDirection,
         selectedCategoryId,
+        selectedTaskId,
         timeLimitInSeconds,
       },
     },
@@ -50,6 +51,7 @@ export function useTimer() {
   return {
     isTimerRunning,
     selectedCategoryId,
+    selectedTaskId,
     currentTimeInSeconds,
     setCurrentTime,
     timeLimitInSeconds,

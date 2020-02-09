@@ -35,6 +35,7 @@ export type Cycle = {
   createdAt?: Maybe<Scalars['String']>,
   categoryIds?: Maybe<Array<Maybe<Scalars['String']>>>,
   taskIds?: Maybe<Array<Maybe<Scalars['String']>>>,
+  notes?: Maybe<Scalars['String']>,
 };
 
 export type Mutation = {
@@ -45,6 +46,7 @@ export type Mutation = {
   toggleIsRunning?: Maybe<Scalars['Boolean']>,
   stopTimer?: Maybe<Scalars['Boolean']>,
   setCycleCategory?: Maybe<Scalars['Boolean']>,
+  setCycleTask?: Maybe<Scalars['Boolean']>,
   setTimeLimit?: Maybe<Scalars['Boolean']>,
   saveCycle?: Maybe<Cycle>,
 };
@@ -63,6 +65,11 @@ export type MutationSetCurrentTimeArgs = {
 
 export type MutationSetCycleCategoryArgs = {
   categoryId: Scalars['String']
+};
+
+
+export type MutationSetCycleTaskArgs = {
+  taskId: Scalars['String']
 };
 
 
@@ -92,6 +99,15 @@ export type QueryUserDataArgs = {
   userId?: Maybe<Scalars['ID']>
 };
 
+export type Task = {
+   __typename?: 'Task',
+  id: Scalars['ID'],
+  taskName?: Maybe<Scalars['String']>,
+  userId?: Maybe<Scalars['String']>,
+  createdAt?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
+};
+
 export type Timer = {
    __typename?: 'Timer',
   id: Scalars['ID'],
@@ -99,6 +115,7 @@ export type Timer = {
   currentTimeInSeconds?: Maybe<Scalars['Int']>,
   timerDirection?: Maybe<TimerDirection>,
   selectedCategoryId?: Maybe<Scalars['String']>,
+  selectedTaskId?: Maybe<Scalars['String']>,
   timeLimitInSeconds?: Maybe<Scalars['Int']>,
 };
 
@@ -115,6 +132,7 @@ export type User = {
   lastName?: Maybe<Scalars['String']>,
   email?: Maybe<Scalars['String']>,
   categories?: Maybe<Array<Maybe<Category>>>,
+  tasks?: Maybe<Array<Maybe<Task>>>,
 };
 
 export type SaveCycleMutationVariables = {
@@ -153,6 +171,16 @@ export type SetCycleCategoryMutationVariables = {
 export type SetCycleCategoryMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'setCycleCategory'>
+);
+
+export type SetCycleTaskMutationVariables = {
+  taskId: Scalars['String']
+};
+
+
+export type SetCycleTaskMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'setCycleTask'>
 );
 
 export type SetTimeLimitMutationVariables = {
@@ -199,7 +227,7 @@ export type TimerQuery = (
   { __typename?: 'Query' }
   & { timer: (
     { __typename?: 'Timer' }
-    & Pick<Timer, 'id' | 'isTimerRunning' | 'currentTimeInSeconds' | 'timerDirection' | 'selectedCategoryId' | 'timeLimitInSeconds'>
+    & Pick<Timer, 'id' | 'isTimerRunning' | 'currentTimeInSeconds' | 'timerDirection' | 'selectedCategoryId' | 'selectedTaskId' | 'timeLimitInSeconds'>
   ) }
 );
 
@@ -214,7 +242,10 @@ export type UserDataQuery = (
     { __typename?: 'User' }
     & { categories: Maybe<Array<Maybe<(
       { __typename?: 'Category' }
-      & Pick<Category, 'id' | 'categoryName' | 'createdAt' | 'description'>
+      & Pick<Category, 'id' | 'categoryName' | 'createdAt'>
+    )>>>, tasks: Maybe<Array<Maybe<(
+      { __typename?: 'Task' }
+      & Pick<Task, 'id' | 'taskName' | 'createdAt' | 'description'>
     )>>> }
   )> }
 );
@@ -295,6 +326,7 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>,
   String: ResolverTypeWrapper<Scalars['String']>,
   Category: ResolverTypeWrapper<Category>,
+  Task: ResolverTypeWrapper<Task>,
   Timer: ResolverTypeWrapper<Timer>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
@@ -311,6 +343,7 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'],
   String: Scalars['String'],
   Category: Category,
+  Task: Task,
   Timer: Timer,
   Boolean: Scalars['Boolean'],
   Int: Scalars['Int'],
@@ -339,6 +372,7 @@ export type CycleResolvers<ContextType = any, ParentType extends ResolversParent
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   categoryIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
   taskIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
+  notes?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -348,6 +382,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   toggleIsRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   stopTimer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   setCycleCategory?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCycleCategoryArgs, 'categoryId'>>,
+  setCycleTask?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCycleTaskArgs, 'taskId'>>,
   setTimeLimit?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetTimeLimitArgs, 'timeLimit'>>,
   saveCycle?: Resolver<Maybe<ResolversTypes['Cycle']>, ParentType, ContextType, RequireFields<MutationSaveCycleArgs, 'id' | 'lengthInSeconds' | 'userId' | 'createdAt' | 'categoryIds' | 'taskIds'>>,
 };
@@ -358,12 +393,21 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   timer?: Resolver<ResolversTypes['Timer'], ParentType, ContextType>,
 };
 
+export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  taskName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+};
+
 export type TimerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timer'] = ResolversParentTypes['Timer']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   isTimerRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   currentTimeInSeconds?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   timerDirection?: Resolver<Maybe<ResolversTypes['TimerDirection']>, ParentType, ContextType>,
   selectedCategoryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  selectedTaskId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   timeLimitInSeconds?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
 };
 
@@ -374,6 +418,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['Category']>>>, ParentType, ContextType>,
+  tasks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Task']>>>, ParentType, ContextType>,
 };
 
 export type Resolvers<ContextType = any> = {
@@ -382,6 +427,7 @@ export type Resolvers<ContextType = any> = {
   Cycle?: CycleResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  Task?: TaskResolvers<ContextType>,
   Timer?: TimerResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
 };
@@ -491,6 +537,36 @@ export function useSetCycleCategoryMutation(baseOptions?: ApolloReactHooks.Mutat
 export type SetCycleCategoryMutationHookResult = ReturnType<typeof useSetCycleCategoryMutation>;
 export type SetCycleCategoryMutationResult = ApolloReactCommon.MutationResult<SetCycleCategoryMutation>;
 export type SetCycleCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<SetCycleCategoryMutation, SetCycleCategoryMutationVariables>;
+export const SetCycleTaskDocument = gql`
+    mutation SetCycleTask($taskId: String!) {
+  setCycleTask(taskId: $taskId) @client
+}
+    `;
+export type SetCycleTaskMutationFn = ApolloReactCommon.MutationFunction<SetCycleTaskMutation, SetCycleTaskMutationVariables>;
+
+/**
+ * __useSetCycleTaskMutation__
+ *
+ * To run a mutation, you first call `useSetCycleTaskMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetCycleTaskMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setCycleTaskMutation, { data, loading, error }] = useSetCycleTaskMutation({
+ *   variables: {
+ *      taskId: // value for 'taskId'
+ *   },
+ * });
+ */
+export function useSetCycleTaskMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetCycleTaskMutation, SetCycleTaskMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetCycleTaskMutation, SetCycleTaskMutationVariables>(SetCycleTaskDocument, baseOptions);
+      }
+export type SetCycleTaskMutationHookResult = ReturnType<typeof useSetCycleTaskMutation>;
+export type SetCycleTaskMutationResult = ApolloReactCommon.MutationResult<SetCycleTaskMutation>;
+export type SetCycleTaskMutationOptions = ApolloReactCommon.BaseMutationOptions<SetCycleTaskMutation, SetCycleTaskMutationVariables>;
 export const SetTimeLimitDocument = gql`
     mutation SetTimeLimit($timeLimit: Int!) {
   setTimeLimit(timeLimit: $timeLimit) @client
@@ -622,6 +698,7 @@ export const TimerDocument = gql`
     currentTimeInSeconds
     timerDirection
     selectedCategoryId
+    selectedTaskId
     timeLimitInSeconds
   }
 }
@@ -657,6 +734,11 @@ export const UserDataDocument = gql`
     categories {
       id
       categoryName
+      createdAt
+    }
+    tasks {
+      id
+      taskName
       createdAt
       description
     }

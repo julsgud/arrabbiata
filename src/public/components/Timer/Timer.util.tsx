@@ -54,6 +54,7 @@ export const TIMER_LIMITS_IN_SECONDS = [
 ]
 
 export const TIMER_DEFAULT_CATEGORY = 'free'
+export const TIMER_DEFAULT_TASK = 'free'
 
 export function isTimerDone(
   timeLimit: number,
@@ -86,6 +87,7 @@ export const DEFAULT_TIMER_OBJECT = {
   currentTimeInSeconds: 0,
   timerDirection: TIMER_DIRECTION.UP,
   selectedCategoryId: TIMER_DEFAULT_CATEGORY,
+  selectedTaskId: TIMER_DEFAULT_TASK,
   timeLimitInSeconds: TIMER_LIMITS_IN_SECONDS[TIMER_LIMITS_IN_SECONDS.length - 1],
   __typename: 'Timer',
 }

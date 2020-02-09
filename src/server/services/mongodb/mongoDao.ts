@@ -2,6 +2,7 @@ import to from 'await-to-js'
 import _ from 'lodash'
 import { mongoDb } from './mongoDbClient'
 import { ObjectId } from 'mongodb'
+import { handleError } from '../../util/errorHandler'
 
 export async function getFirstDocumentFromCollectionByField(
   collection: string,
@@ -10,31 +11,38 @@ export async function getFirstDocumentFromCollectionByField(
 ): Promise<any> {
   const [err, document] = await to(mongoDb.collection(collection).findOne({ [field]: value }))
   if (err || document === null) throw new Error(err || 'Could not find document.')
-  return normalizeDocumentId(document)
+  return removeUnderscoreFromDocumentId(document)
 }
 
-export async function getDocumentFromCollectionByField(
+export async function getDocumentsFromCollectionByField(
   collection: string,
   field: string,
   value: any
 ): Promise<Object | Error> {
-  const [err, document] = await to(
+  console.log(collection, field, value)
+  const [err, documents] = await to(
     mongoDb
       .collection(collection)
       .find({ [field]: value })
       .toArray()
   )
-  if (err || document === null) throw new Error(err || 'Could not find document.')
-  return normalizeDocumentId(document)
+  if (err || (documents && !documents.length) || documents === null) {
+    return handleError(err || new Error('Could not find documents'), false)
+  }
+  return removeUnderscoreFromDocumentsIds(documents)
 }
 
 export async function getDocumentFromCollectionById(collection: string, id: string): Promise<any> {
   const _id = new ObjectId(id)
   const [err, document] = await to(mongoDb.collection(collection).findOne({ _id }))
   if (err || document === null) throw new Error(err || 'Could not find document.')
-  return normalizeDocumentId(document)
+  return removeUnderscoreFromDocumentId(document)
 }
 
-export function normalizeDocumentId(document) {
+export function removeUnderscoreFromDocumentsIds(documents) {
+  return Object.keys(documents).map(key => removeUnderscoreFromDocumentId(documents[key]))
+}
+
+export function removeUnderscoreFromDocumentId(document) {
   return Object.assign({ id: document._id }, _.omit(document, ['_id']))
 }

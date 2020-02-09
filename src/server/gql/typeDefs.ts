@@ -8,11 +8,20 @@ export const typeDefs = gql`
     lastName: String
     email: String
     categories: [Category]
+    tasks: [Task]
   }
 
   type Category {
     id: ID!
     categoryName: String
+    userId: String
+    createdAt: String
+    description: String
+  }
+
+  type Task {
+    id: ID!
+    taskName: String
     userId: String
     createdAt: String
     description: String
@@ -24,6 +33,7 @@ export const typeDefs = gql`
     currentTimeInSeconds: Int
     timerDirection: TimerDirection
     selectedCategoryId: String
+    selectedTaskId: String
     timeLimitInSeconds: Int
   }
 
@@ -34,6 +44,7 @@ export const typeDefs = gql`
     createdAt: String
     categoryIds: [String]
     taskIds: [String]
+    notes: String
   }
 
   enum TimerDirection {
@@ -58,6 +69,7 @@ export const typeDefs = gql`
     toggleIsRunning: Boolean
     stopTimer: Boolean
     setCycleCategory(categoryId: String!): Boolean
+    setCycleTask(taskId: String!): Boolean
     setTimeLimit(timeLimit: Int!): Boolean
     saveCycle(
       id: ID!

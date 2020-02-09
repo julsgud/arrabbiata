@@ -1,12 +1,13 @@
-import { getCategoriesByUserId } from '../daos/category/categoryDao'
 import { createCycle } from '../daos/cycle/cycleDao'
+import { getUserCollectionByUserId } from '../daos/user/userDao'
 
 export const resolvers = {
   Query: {
     currentUser: (root, args, context) => context.user,
     userData: async (root, { userId }) => {
       return {
-        categories: await getCategoriesByUserId(userId),
+        categories: await getUserCollectionByUserId('categories', userId),
+        tasks: await getUserCollectionByUserId('tasks', userId),
       }
     },
   },
