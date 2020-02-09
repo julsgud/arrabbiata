@@ -71,6 +71,7 @@ export const typeDefs = gql`
     setCycleCategory(categoryId: String!): Boolean
     setCycleTask(taskId: String!): Boolean
     setTimeLimit(timeLimit: Int!): Boolean
+    updateNotes(updatedNotes: String!): Boolean
     saveCycle(
       id: ID!
       lengthInSeconds: Int!

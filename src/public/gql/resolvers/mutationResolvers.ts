@@ -1,7 +1,8 @@
 import { GET_TIMER } from '../queries/timer'
 
-const getTimer = (cache) => cache.readQuery({ query: GET_TIMER })
-const writeTimer = (cache, newTimerData) => cache.writeQuery({ query: GET_TIMER, data: { timer: newTimerData } })
+const getTimer = cache => cache.readQuery({ query: GET_TIMER })
+const writeTimer = (cache, newTimerData) =>
+  cache.writeQuery({ query: GET_TIMER, data: { timer: newTimerData } })
 
 // todo whats the commonality of the two set ids?
 const setCycleCategory = (_, args, { cache }) => {
@@ -37,6 +38,12 @@ const toggleIsRunning = (_, __, { cache }) => {
 const setTimeLimit = (_, args, { cache }) => {
   const { timer } = getTimer(cache)
   const newTimerData = { ...timer, timeLimitInSeconds: args.timeLimit }
+  writeTimer(cache, newTimerData)
+}
+
+const updateNotes = (_, args, { cache }) => {
+  const { timer } = getTimer(cache)
+  const newTimerData = { ...timer, notes: args.updatedNotes }
   writeTimer(cache, newTimerData)
 }
 
