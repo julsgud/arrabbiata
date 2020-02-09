@@ -35,6 +35,7 @@ export const typeDefs = gql`
     selectedCategoryId: String
     selectedTaskId: String
     timeLimitInSeconds: Int
+    notes: String
   }
 
   type Cycle {
@@ -54,7 +55,7 @@ export const typeDefs = gql`
 
   type Query {
     currentUser: User
-    userData(userId: ID): User
+    userData: User
     timer: Timer!
   }
 
@@ -72,13 +73,13 @@ export const typeDefs = gql`
     setCycleTask(taskId: String!): Boolean
     setTimeLimit(timeLimit: Int!): Boolean
     updateNotes(updatedNotes: String!): Boolean
+    resetCycle: Boolean
     saveCycle(
-      id: ID!
       lengthInSeconds: Int!
-      userId: String!
       createdAt: String!
       categoryIds: [String]!
       taskIds: [String]!
+      notes: String
     ): Cycle
   }
 `

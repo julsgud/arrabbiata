@@ -6,7 +6,6 @@ import {
   useTimerQuery,
   useToggleIsRunningMutation,
 } from '../../generated/graphql'
-import uuid from 'uuid'
 import moment from 'moment'
 
 export function useTimer() {
@@ -14,11 +13,12 @@ export function useTimer() {
     data: {
       // @ts-ignore
       timer: {
-        isTimerRunning,
         currentTimeInSeconds,
-        timerDirection,
+        isTimerRunning,
+        notes,
         selectedCategoryId,
         selectedTaskId,
+        timerDirection,
         timeLimitInSeconds,
       },
     },
@@ -33,31 +33,28 @@ export function useTimer() {
     []
   )
 
-  const saveCycle = useCallback(
-    userId => {
-      const cycle = {
-        id: uuid.v4(),
-        lengthInSeconds: currentTimeInSeconds,
-        userId: userId,
-        createdAt: moment().toISOString(),
-        categoryIds: [selectedCategoryId],
-        taskIds: [],
-      }
-      return saveCycleMutation({ variables: { ...cycle } })
-    },
-    [currentTimeInSeconds, selectedCategoryId]
-  )
+  const saveCycle = useCallback(() => {
+    const cycle = {
+      lengthInSeconds: currentTimeInSeconds,
+      createdAt: moment().toISOString(),
+      categoryIds: [selectedCategoryId],
+      taskIds: [],
+      notes,
+    }
+    return saveCycleMutation({ variables: { ...cycle } }).then()
+  }, [currentTimeInSeconds, selectedCategoryId])
 
   return {
+    currentTimeInSeconds,
     isTimerRunning,
+    notes,
+    saveCycle,
     selectedCategoryId,
     selectedTaskId,
-    currentTimeInSeconds,
     setCurrentTime,
-    timeLimitInSeconds,
-    toggleIsRunning,
     stopTimer,
     timerDirection,
-    saveCycle,
+    timeLimitInSeconds,
+    toggleIsRunning,
   }
 }

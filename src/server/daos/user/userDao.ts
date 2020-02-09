@@ -36,7 +36,7 @@ export async function getUserByEmail(email: string): Promise<User | Error> {
 export async function getUserCollectionByUserId(
   collection: string,
   userId: string
-): Promise<Array<any>> {
+): Promise<any> {
   const documents = await getDocumentsFromCollectionByField(collection, 'userId', userId)
   return documents || []
 }

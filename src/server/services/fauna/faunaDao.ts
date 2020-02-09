@@ -8,7 +8,7 @@ export function getFirstDocumentOnIndexById(index: string, id: string): Promise<
   return faunaClient.query(faunaQuery.Get(faunaQuery.Match(faunaQuery.Index(index), id)))
 }
 
-export function createDocumentOnCollection(collection, document): Promise<any> {
+export function createDocumentOnCollectionOnFauna(collection, document): Promise<any> {
  return faunaClient.query(
    faunaQuery.Create(
      faunaQuery.Collection(collection),

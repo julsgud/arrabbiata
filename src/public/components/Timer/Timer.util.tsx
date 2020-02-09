@@ -89,5 +89,6 @@ export const DEFAULT_TIMER_OBJECT = {
   selectedCategoryId: TIMER_DEFAULT_CATEGORY,
   selectedTaskId: TIMER_DEFAULT_TASK,
   timeLimitInSeconds: TIMER_LIMITS_IN_SECONDS[TIMER_LIMITS_IN_SECONDS.length - 1],
+  notes: '',
   __typename: 'Timer',
 }

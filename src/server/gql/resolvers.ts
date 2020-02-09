@@ -1,13 +1,13 @@
-import { createCycle } from '../daos/cycle/cycleDao'
+import { saveCycle } from '../daos/cycle/cycleDao'
 import { getUserCollectionByUserId } from '../daos/user/userDao'
 
 export const resolvers = {
   Query: {
     currentUser: (root, args, context) => context.user,
-    userData: async (root, { userId }) => {
+    userData: async (root, args, context) => {
       return {
-        categories: await getUserCollectionByUserId('categories', userId),
-        tasks: await getUserCollectionByUserId('tasks', userId),
+        categories: await getUserCollectionByUserId('categories', context.user.id.toString()),
+        tasks: await getUserCollectionByUserId('tasks', context.user.id.toString()),
       }
     },
   },
@@ -20,10 +20,17 @@ export const resolvers = {
     },
     saveCycle: async (
       root,
-      { id, lengthInSeconds, userId, createdAt, categoryIds, taskIds },
+      { lengthInSeconds, createdAt, categoryIds, taskIds, notes },
       context
     ) => {
-      return await createCycle(id, lengthInSeconds, userId, createdAt, categoryIds, taskIds)
+      return await saveCycle(
+        context.user.id.toString(),
+        lengthInSeconds,
+        createdAt,
+        categoryIds,
+        taskIds,
+        notes
+      )
     },
   },
 }

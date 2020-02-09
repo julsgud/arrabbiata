@@ -2,7 +2,7 @@ import to from 'await-to-js'
 import _ from 'lodash'
 import { mongoDb } from './mongoDbClient'
 import { ObjectId } from 'mongodb'
-import { handleError } from '../../util/errorHandler'
+import { handleError} from '../../util/errorHandler'
 
 export async function getFirstDocumentFromCollectionByField(
   collection: string,
@@ -14,11 +14,17 @@ export async function getFirstDocumentFromCollectionByField(
   return removeUnderscoreFromDocumentId(document)
 }
 
+export async function insertDocumentIntoCollection(collection: string, document: object) {
+  const [err, response] = await to(mongoDb.collection(collection).insertOne(document))
+  if (err) return handleError(err, true)
+  return removeUnderscoreFromDocumentId(response && response.ops[0])
+}
+
 export async function getDocumentsFromCollectionByField(
   collection: string,
   field: string,
   value: any
-): Promise<any> {
+): Promise<Array<any> | Error> {
   const [err, documents] = await to(
     mongoDb
       .collection(collection)

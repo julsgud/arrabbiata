@@ -1,18 +1,21 @@
-import to from 'await-to-js'
+import { insertDocumentIntoCollection } from '../../services/mongodb/mongoDao'
 import { CYCLE_COLLECTION } from '../../services/fauna/collectionNames'
-import { createDocumentOnCollection } from '../../services/fauna/faunaDao'
-import { throwError } from '../../util/errorHandler'
 
-export async function createCycle(id, lengthInSeconds, userId, createdAt, categoryIds, taskIds) {
+export async function saveCycle(
+  userId: string,
+  lengthInSeconds: number,
+  createdAt: string,
+  categoryIds: string[],
+  taskIds: string[],
+  notes: string
+) {
   const cycle = {
-    id,
-    lengthInSeconds,
-    userId,
-    createdAt,
     categoryIds,
+    createdAt,
+    lengthInSeconds,
+    notes,
     taskIds,
+    userId,
   }
-  const [err, response] = await to(createDocumentOnCollection(CYCLE_COLLECTION, { data: cycle }))
-  if (err) throwError(err)
-  return response && response.data
+  return await insertDocumentIntoCollection(CYCLE_COLLECTION, cycle)
 }
