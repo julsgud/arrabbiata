@@ -18,17 +18,14 @@ export async function getDocumentsFromCollectionByField(
   collection: string,
   field: string,
   value: any
-): Promise<Object | Error> {
-  console.log(collection, field, value)
+): Promise<any> {
   const [err, documents] = await to(
     mongoDb
       .collection(collection)
       .find({ [field]: value })
       .toArray()
   )
-  if (err || (documents && !documents.length) || documents === null) {
-    return handleError(err || new Error('Could not find documents'), false)
-  }
+  if (err) return handleError(err, true)
   return removeUnderscoreFromDocumentsIds(documents)
 }
 
