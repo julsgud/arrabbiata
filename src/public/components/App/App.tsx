@@ -10,6 +10,7 @@ import { Gatekeeper } from '../Gatekeeper/Gatekeeper'
 import { GET_TIMER } from '../../gql/queries/timer'
 import { DEFAULT_TIMER_OBJECT } from '../Timer/Timer.util'
 import { mutationResolvers } from '../../gql/resolvers/mutationResolvers'
+import { Navigation } from '../Navigation/Navigation'
 
 export const link = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -45,7 +46,9 @@ export function App() {
     <ApolloProvider client={client}>
       <Router>
         <Gatekeeper>
-          <Layout />
+          <Navigation>
+            <Layout />
+          </Navigation>
         </Gatekeeper>
       </Router>
     </ApolloProvider>
