@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSetTimeLimitMutation } from '../../../../generated/graphql'
+import { useSetTimeLimitMutation } from '../../../../../generated/graphql'
 import { Row } from '../CategorySelect/CategorySelect'
 import { TIMER_LIMITS_IN_SECONDS } from '../Timer.util'
 

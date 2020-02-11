@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useUpdateNotesMutation } from '../../../../generated/graphql'
+import { useUpdateNotesMutation } from '../../../../../generated/graphql'
 
 interface NotesProps {
   notes: string

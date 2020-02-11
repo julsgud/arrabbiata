@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Task, useSetCycleTaskMutation } from '../../../../generated/graphql'
+import { Task, useSetCycleTaskMutation } from '../../../../../generated/graphql'
 
 interface TaskSelectProps {
   selectedTaskId: string

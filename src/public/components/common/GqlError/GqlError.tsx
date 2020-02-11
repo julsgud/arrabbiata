@@ -1,5 +1,5 @@
 import React from 'react'
-import { getMessageOutOfGraphqlError } from '../../util/errorUtil'
+import { getMessageOutOfGraphqlError } from '../../../util/errorUtil'
 
 interface GQLErrorProps {
   error: Error

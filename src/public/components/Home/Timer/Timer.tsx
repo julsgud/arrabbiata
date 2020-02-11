@@ -5,9 +5,9 @@ import {
   secondsToMinutesSecondsFormat,
   TIMER_DIRECTION,
 } from './Timer.util'
-import { useTimer } from '../../hooks/useTimer'
+import { useTimer } from '../../../hooks/useTimer'
 import { CategorySelect } from './CategorySelect/CategorySelect'
-import { User } from '../../../generated/graphql'
+import { User } from '../../../../generated/graphql'
 import { TimeLimitSelect } from './TimeLimitSelect/TimeLimitSelect'
 import { TaskSelect } from './TaskSelect/TaskSelect'
 import { Notes } from './Notes/Notes'

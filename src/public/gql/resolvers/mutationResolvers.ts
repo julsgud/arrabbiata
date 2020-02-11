@@ -1,5 +1,5 @@
 import { GET_TIMER } from '../queries/timer'
-import { DEFAULT_TIMER_OBJECT } from '../../components/Timer/Timer.util'
+import { DEFAULT_TIMER_OBJECT } from '../../components/Home/Timer/Timer.util'
 
 const getTimer = cache => cache.readQuery({ query: GET_TIMER }).timer
 const writeTimer = (cache, newTimerData) =>

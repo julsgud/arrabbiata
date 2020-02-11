@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
-import { useCurrentUserQuery, useUserDataQuery } from '../../../generated/graphql'
-import { GQLError } from '../GqlError/GqlError'
+import { useCurrentUserQuery, useUserDataQuery } from '../../../../generated/graphql'
+import { GQLError } from '../../common/GqlError/GqlError'
 
 interface UserDataFetcherProps {
   children: ReactNode

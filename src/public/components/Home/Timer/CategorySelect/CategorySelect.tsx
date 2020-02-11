@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Category, useSetCycleCategoryMutation } from '../../../../generated/graphql'
+import { Category, useSetCycleCategoryMutation } from '../../../../../generated/graphql'
 
 interface CategorySelectProps {
   selectedCategoryId: string

@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
-import {useCurrentUserQuery} from "../../../generated/graphql";
-import {GQLError} from "../GqlError/GqlError";
+import { AuthContext } from '../../../contexts/AuthContext'
+import {useCurrentUserQuery} from "../../../../generated/graphql";
+import {GQLError} from "../../common/GqlError/GqlError";
 
 interface GatekeeperProps {
   children: ReactNode

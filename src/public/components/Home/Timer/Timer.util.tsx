@@ -1,4 +1,4 @@
-import { TimerDirection } from '../../../generated/graphql'
+import { TimerDirection } from '../../../../generated/graphql'
 
 export function secondsToMinutesSecondsFormat(seconds: number): String {
   const m = Math.floor((seconds % 3600) / 60)

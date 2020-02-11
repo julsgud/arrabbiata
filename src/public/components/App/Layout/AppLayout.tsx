@@ -1,7 +1,7 @@
 import React from 'react'
 import { Redirect, Switch } from 'react-router-dom'
 import { Home } from '../../Home/Home'
-import { UserDataFetcher } from '../../UserDataFetcher/UserDataFetcher'
+import { UserDataFetcher } from '../../wrappers/UserDataFetcher/UserDataFetcher'
 import { PrivateRoute } from './PrivateRoute/PrivateRoute'
 import { Settings } from '../../Settings/Settings'
 
