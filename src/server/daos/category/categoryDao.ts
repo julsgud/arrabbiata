@@ -1,12 +1,14 @@
-import to from 'await-to-js'
-import { CATEGORIES_BY_USER_ID_INDEX } from '../../services/fauna/indexNames'
-import { throwError } from '../../util/errorHandler'
-import { FaunaResult, getDocumentsOnIndexById } from '../../services/fauna/faunaDao'
-import { Category } from '../../../generated/graphql'
+import moment from 'moment'
+import { insertDocumentIntoCollection } from '../../services/mongodb/mongoDao'
 
-export async function getCategoriesByUserIdFromFauna(userId: string): Promise<Category | Error> {
-  const [err, response] = await to(getDocumentsOnIndexById(CATEGORIES_BY_USER_ID_INDEX, userId))
-  if (err) throwError(err)
-  return (response.data.length && response.data.map((result: FaunaResult) => result.data)) || []
+export const CATEGORY_COLLECTION = 'categories'
+
+export async function saveCategory(userId: string, categoryName: string) {
+  const category = {
+    userId,
+    categoryName,
+    createdAt: moment().toISOString(),
+  }
+
+  return await insertDocumentIntoCollection(CATEGORY_COLLECTION, category)
 }
-

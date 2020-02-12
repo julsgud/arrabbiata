@@ -16,7 +16,6 @@ export const typeDefs = gql`
     categoryName: String
     userId: String
     createdAt: String
-    description: String
   }
 
   type Task {
@@ -69,11 +68,8 @@ export const typeDefs = gql`
     setCurrentTime(timeInSeconds: Int!): Boolean
     toggleIsRunning: Boolean
     stopTimer: Boolean
-    setCycleCategory(categoryId: String!): Boolean
-    setCycleTask(taskId: String!): Boolean
-    setTimeLimit(timeLimit: Int!): Boolean
-    updateNotes(updatedNotes: String!): Boolean
     resetCycle: Boolean
+    saveCategory(categoryName: String): Category
     saveCycle(
       lengthInSeconds: Int!
       createdAt: String!
@@ -81,5 +77,9 @@ export const typeDefs = gql`
       taskIds: [String]!
       notes: String
     ): Cycle
+    setTimeLimit(timeLimit: Int!): Boolean
+    setCycleCategory(categoryId: String!): Boolean
+    setCycleTask(taskId: String!): Boolean
+    updateNotes(updatedNotes: String!): Boolean
   }
 `
