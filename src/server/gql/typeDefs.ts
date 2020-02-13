@@ -70,6 +70,7 @@ export const typeDefs = gql`
     stopTimer: Boolean
     resetCycle: Boolean
     saveCategory(categoryName: String): Category
+    deleteCategory(categoryId: String): Category
     saveCycle(
       lengthInSeconds: Int!
       createdAt: String!

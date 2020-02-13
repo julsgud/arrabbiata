@@ -1,6 +1,6 @@
 import { saveCycle } from '../daos/cycle/cycleDao'
 import { getUserCollectionByUserId } from '../daos/user/userDao'
-import { saveCategory } from '../daos/category/categoryDao'
+import { deleteCategory, saveCategory } from '../daos/category/categoryDao'
 
 export const resolvers = {
   Query: {
@@ -35,6 +35,9 @@ export const resolvers = {
     },
     saveCategory: async (root, { categoryName }, context) => {
       return await saveCategory(context.user.id.toString(), categoryName)
+    },
+    deleteCategory: async (root, { categoryId }, context) => {
+      return await deleteCategory(categoryId)
     },
   },
 }

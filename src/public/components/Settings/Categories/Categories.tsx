@@ -2,11 +2,44 @@ import React from 'react'
 import update from 'immutability-helper'
 import { Input } from '../Input/Input'
 import { Pills } from '../Pill/Pills'
-import { useSaveCategoryMutation } from '../../../../generated/graphql'
+import { useDeleteCategoryMutation, useSaveCategoryMutation } from '../../../../generated/graphql'
 import { USER_DATA } from '../../../gql/queries/userData'
 
 export function Categories({ categories }) {
-  const [saveCategory] = useSaveCategoryMutation()
+  const [saveCategory] = useSaveCategoryMutation({
+    // @ts-ignore
+    update: (cache, { data: { saveCategory } }) => {
+      const previousQueryResult = cache.readQuery({ query: USER_DATA })
+      const newData = update(previousQueryResult, {
+        // @ts-ignore
+        userData: {
+          categories: {
+            $push: [saveCategory],
+          },
+        },
+      })
+      cache.writeQuery({ query: USER_DATA, data: newData })
+    },
+  })
+
+  const [deleteCategory] = useDeleteCategoryMutation({
+    // @ts-ignore
+    update: (cache, { data: { deleteCategory } }) => {
+      const previousQueryResult = cache.readQuery({ query: USER_DATA })
+      const indexOfDeletedCategory = categories.findIndex(cat => cat.id === deleteCategory.id)
+      console.log(previousQueryResult)
+      console.log(indexOfDeletedCategory)
+      const newData = update(previousQueryResult, {
+        // @ts-ignore
+        userData: {
+          categories: {
+            $splice: [[indexOfDeletedCategory, 1]],
+          },
+        },
+      })
+      cache.writeQuery({ query: USER_DATA, data: newData })
+    },
+  })
 
   return (
     <>
@@ -15,22 +48,18 @@ export function Categories({ categories }) {
         onEnterCallback={categoryName =>
           saveCategory({
             variables: { categoryName },
-            update: (cache, { data: { saveCategory } }) => {
-              const previousQueryResult = cache.readQuery({ query: USER_DATA })
-              const newData = update(previousQueryResult, {
-                userData: {
-                  categories: {
-                    $push: [saveCategory],
-                  },
-                },
-              })
-
-              cache.writeQuery({ query: USER_DATA, data: newData })
-            },
           })
         }
       />
-      <Pills type="category" items={categories} deleteCallback={() => console.log('Delete')} />
+      <Pills
+        type="category"
+        items={categories}
+        deleteCallback={categoryId =>
+          deleteCategory({
+            variables: { categoryId },
+          })
+        }
+      />
     </>
   )
 }

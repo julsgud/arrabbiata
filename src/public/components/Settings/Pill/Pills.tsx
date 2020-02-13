@@ -11,7 +11,11 @@ export function Pills({ items, type, deleteCallback }) {
   return (
     <Wrapper>
       {items.map(item => (
-        <Pill key={item.id} label={item[`${type}Name`]} deleteCallback={deleteCallback} />
+        <Pill
+          key={item.id}
+          label={item[`${type}Name`]}
+          deleteCallback={() => deleteCallback(item.id)}
+        />
       ))}
     </Wrapper>
   )

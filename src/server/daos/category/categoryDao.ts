@@ -1,5 +1,8 @@
 import moment from 'moment'
-import { insertDocumentIntoCollection } from '../../services/mongodb/mongoDao'
+import {
+  deleteDocumentFromCollectionById,
+  insertDocumentIntoCollection,
+} from '../../services/mongodb/mongoDao'
 
 export const CATEGORY_COLLECTION = 'categories'
 
@@ -11,4 +14,9 @@ export async function saveCategory(userId: string, categoryName: string) {
   }
 
   return await insertDocumentIntoCollection(CATEGORY_COLLECTION, category)
+}
+
+export async function deleteCategory(categoryId: string) {
+  await deleteDocumentFromCollectionById(CATEGORY_COLLECTION, categoryId)
+  return { id: categoryId }
 }

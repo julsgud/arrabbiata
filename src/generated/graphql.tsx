@@ -46,6 +46,7 @@ export type Mutation = {
   stopTimer?: Maybe<Scalars['Boolean']>,
   resetCycle?: Maybe<Scalars['Boolean']>,
   saveCategory?: Maybe<Category>,
+  deleteCategory?: Maybe<Category>,
   saveCycle?: Maybe<Cycle>,
   setTimeLimit?: Maybe<Scalars['Boolean']>,
   setCycleCategory?: Maybe<Scalars['Boolean']>,
@@ -67,6 +68,11 @@ export type MutationSetCurrentTimeArgs = {
 
 export type MutationSaveCategoryArgs = {
   categoryName?: Maybe<Scalars['String']>
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  categoryId?: Maybe<Scalars['String']>
 };
 
 
@@ -141,6 +147,19 @@ export type User = {
   categories?: Maybe<Array<Maybe<Category>>>,
   tasks?: Maybe<Array<Maybe<Task>>>,
 };
+
+export type DeleteCategoryMutationVariables = {
+  categoryId: Scalars['String']
+};
+
+
+export type DeleteCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteCategory: Maybe<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+  )> }
+);
 
 export type SaveCategoryMutationVariables = {
   categoryName: Scalars['String']
@@ -417,6 +436,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   stopTimer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   resetCycle?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   saveCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, MutationSaveCategoryArgs>,
+  deleteCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, MutationDeleteCategoryArgs>,
   saveCycle?: Resolver<Maybe<ResolversTypes['Cycle']>, ParentType, ContextType, RequireFields<MutationSaveCycleArgs, 'lengthInSeconds' | 'createdAt' | 'categoryIds' | 'taskIds'>>,
   setTimeLimit?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetTimeLimitArgs, 'timeLimit'>>,
   setCycleCategory?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCycleCategoryArgs, 'categoryId'>>,
@@ -478,6 +498,38 @@ export type Resolvers<ContextType = any> = {
 export type IResolvers<ContextType = any> = Resolvers<ContextType>;
 
 
+export const DeleteCategoryDocument = gql`
+    mutation DeleteCategory($categoryId: String!) {
+  deleteCategory(categoryId: $categoryId) {
+    id
+  }
+}
+    `;
+export type DeleteCategoryMutationFn = ApolloReactCommon.MutationFunction<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+
+/**
+ * __useDeleteCategoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCategoryMutation, { data, loading, error }] = useDeleteCategoryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useDeleteCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteCategoryMutation, DeleteCategoryMutationVariables>(DeleteCategoryDocument, baseOptions);
+      }
+export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCategoryMutation>;
+export type DeleteCategoryMutationResult = ApolloReactCommon.MutationResult<DeleteCategoryMutation>;
+export type DeleteCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
 export const SaveCategoryDocument = gql`
     mutation SaveCategory($categoryName: String!) {
   saveCategory(categoryName: $categoryName) {
