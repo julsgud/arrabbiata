@@ -23,6 +23,7 @@ export const typeDefs = gql`
   type Task {
     id: ID!
     taskName: String
+    categoryId: String
     userId: String
     createdAt: String
     isArchived: Boolean
@@ -71,8 +72,10 @@ export const typeDefs = gql`
     toggleIsRunning: Boolean
     stopTimer: Boolean
     resetCycle: Boolean
-    saveCategory(categoryName: String): Category
-    deleteCategory(categoryId: String): Category
+    saveCategory(categoryName: String!): Category
+    saveTask(categoryId: String!, taskName: String!): Task
+    deleteCategory(categoryId: String!): Category
+    deleteTask(taskId: String!): Task
     saveCycle(
       lengthInSeconds: Int!
       createdAt: String!

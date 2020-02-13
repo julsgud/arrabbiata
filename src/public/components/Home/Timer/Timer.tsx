@@ -65,7 +65,7 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
       {secondsToMinutesSecondsFormat(currentTimeInSeconds)}
       <br />
       <CategorySelect selectedCategoryId={selectedCategoryId} categories={user.categories} />
-      <TaskSelect selectedTaskId={selectedTaskId} tasks={user.tasks} />
+      <TaskSelect selectedCategoryId={selectedCategoryId} selectedTaskId={selectedTaskId} tasks={user.tasks} />
       <TimeLimitSelect timeLimitInSeconds={timeLimitInSeconds} />
       <Notes notes={notes} />
       <br />

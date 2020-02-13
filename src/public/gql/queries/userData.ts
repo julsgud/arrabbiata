@@ -11,8 +11,8 @@ export const USER_DATA = gql`
       tasks {
         id
         taskName
+        categoryId
         createdAt
-        description
       }
     }
   }

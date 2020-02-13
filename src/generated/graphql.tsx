@@ -24,6 +24,7 @@ export type Category = {
   categoryName?: Maybe<Scalars['String']>,
   userId?: Maybe<Scalars['String']>,
   createdAt?: Maybe<Scalars['String']>,
+  isArchived?: Maybe<Scalars['Boolean']>,
 };
 
 export type Cycle = {
@@ -46,7 +47,9 @@ export type Mutation = {
   stopTimer?: Maybe<Scalars['Boolean']>,
   resetCycle?: Maybe<Scalars['Boolean']>,
   saveCategory?: Maybe<Category>,
+  saveTask?: Maybe<Task>,
   deleteCategory?: Maybe<Category>,
+  deleteTask?: Maybe<Task>,
   saveCycle?: Maybe<Cycle>,
   setTimeLimit?: Maybe<Scalars['Boolean']>,
   setCycleCategory?: Maybe<Scalars['Boolean']>,
@@ -67,12 +70,23 @@ export type MutationSetCurrentTimeArgs = {
 
 
 export type MutationSaveCategoryArgs = {
-  categoryName?: Maybe<Scalars['String']>
+  categoryName: Scalars['String']
+};
+
+
+export type MutationSaveTaskArgs = {
+  categoryId: Scalars['String'],
+  taskName: Scalars['String']
 };
 
 
 export type MutationDeleteCategoryArgs = {
-  categoryId?: Maybe<Scalars['String']>
+  categoryId: Scalars['String']
+};
+
+
+export type MutationDeleteTaskArgs = {
+  taskId: Scalars['String']
 };
 
 
@@ -115,9 +129,10 @@ export type Task = {
    __typename?: 'Task',
   id: Scalars['ID'],
   taskName?: Maybe<Scalars['String']>,
+  categoryId?: Maybe<Scalars['String']>,
   userId?: Maybe<Scalars['String']>,
   createdAt?: Maybe<Scalars['String']>,
-  description?: Maybe<Scalars['String']>,
+  isArchived?: Maybe<Scalars['Boolean']>,
 };
 
 export type Timer = {
@@ -146,6 +161,7 @@ export type User = {
   email?: Maybe<Scalars['String']>,
   categories?: Maybe<Array<Maybe<Category>>>,
   tasks?: Maybe<Array<Maybe<Task>>>,
+  isArchived?: Maybe<Scalars['Boolean']>,
 };
 
 export type DeleteCategoryMutationVariables = {
@@ -265,6 +281,33 @@ export type UpdateNotesMutation = (
   & Pick<Mutation, 'updateNotes'>
 );
 
+export type DeleteTaskMutationVariables = {
+  taskId: Scalars['String']
+};
+
+
+export type DeleteTaskMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteTask: Maybe<(
+    { __typename?: 'Task' }
+    & Pick<Task, 'id'>
+  )> }
+);
+
+export type SaveTaskMutationVariables = {
+  categoryId: Scalars['String'],
+  taskName: Scalars['String']
+};
+
+
+export type SaveTaskMutation = (
+  { __typename?: 'Mutation' }
+  & { saveTask: Maybe<(
+    { __typename?: 'Task' }
+    & Pick<Task, 'id' | 'categoryId' | 'createdAt' | 'taskName' | 'userId'>
+  )> }
+);
+
 export type CurrentUserQueryVariables = {};
 
 
@@ -299,7 +342,7 @@ export type UserDataQuery = (
       & Pick<Category, 'id' | 'categoryName' | 'createdAt'>
     )>>>, tasks: Maybe<Array<Maybe<(
       { __typename?: 'Task' }
-      & Pick<Task, 'id' | 'taskName' | 'createdAt' | 'description'>
+      & Pick<Task, 'id' | 'taskName' | 'categoryId' | 'createdAt'>
     )>>> }
   )> }
 );
@@ -380,9 +423,9 @@ export type ResolversTypes = {
   ID: ResolverTypeWrapper<Scalars['ID']>,
   String: ResolverTypeWrapper<Scalars['String']>,
   Category: ResolverTypeWrapper<Category>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Task: ResolverTypeWrapper<Task>,
   Timer: ResolverTypeWrapper<Timer>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   TimerDirection: TimerDirection,
   Mutation: ResolverTypeWrapper<{}>,
@@ -397,9 +440,9 @@ export type ResolversParentTypes = {
   ID: Scalars['ID'],
   String: Scalars['String'],
   Category: Category,
+  Boolean: Scalars['Boolean'],
   Task: Task,
   Timer: Timer,
-  Boolean: Scalars['Boolean'],
   Int: Scalars['Int'],
   TimerDirection: TimerDirection,
   Mutation: {},
@@ -416,6 +459,7 @@ export type CategoryResolvers<ContextType = any, ParentType extends ResolversPar
   categoryName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  isArchived?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type CycleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cycle'] = ResolversParentTypes['Cycle']> = {
@@ -435,8 +479,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   toggleIsRunning?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   stopTimer?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   resetCycle?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  saveCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, MutationSaveCategoryArgs>,
-  deleteCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, MutationDeleteCategoryArgs>,
+  saveCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<MutationSaveCategoryArgs, 'categoryName'>>,
+  saveTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationSaveTaskArgs, 'categoryId' | 'taskName'>>,
+  deleteCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'categoryId'>>,
+  deleteTask?: Resolver<Maybe<ResolversTypes['Task']>, ParentType, ContextType, RequireFields<MutationDeleteTaskArgs, 'taskId'>>,
   saveCycle?: Resolver<Maybe<ResolversTypes['Cycle']>, ParentType, ContextType, RequireFields<MutationSaveCycleArgs, 'lengthInSeconds' | 'createdAt' | 'categoryIds' | 'taskIds'>>,
   setTimeLimit?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetTimeLimitArgs, 'timeLimit'>>,
   setCycleCategory?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationSetCycleCategoryArgs, 'categoryId'>>,
@@ -453,9 +499,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   taskName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  categoryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  isArchived?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type TimerResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timer'] = ResolversParentTypes['Timer']> = {
@@ -477,6 +524,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['Category']>>>, ParentType, ContextType>,
   tasks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Task']>>>, ParentType, ContextType>,
+  isArchived?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type Resolvers<ContextType = any> = {
@@ -838,6 +886,75 @@ export function useUpdateNotesMutation(baseOptions?: ApolloReactHooks.MutationHo
 export type UpdateNotesMutationHookResult = ReturnType<typeof useUpdateNotesMutation>;
 export type UpdateNotesMutationResult = ApolloReactCommon.MutationResult<UpdateNotesMutation>;
 export type UpdateNotesMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateNotesMutation, UpdateNotesMutationVariables>;
+export const DeleteTaskDocument = gql`
+    mutation DeleteTask($taskId: String!) {
+  deleteTask(taskId: $taskId) {
+    id
+  }
+}
+    `;
+export type DeleteTaskMutationFn = ApolloReactCommon.MutationFunction<DeleteTaskMutation, DeleteTaskMutationVariables>;
+
+/**
+ * __useDeleteTaskMutation__
+ *
+ * To run a mutation, you first call `useDeleteTaskMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTaskMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTaskMutation, { data, loading, error }] = useDeleteTaskMutation({
+ *   variables: {
+ *      taskId: // value for 'taskId'
+ *   },
+ * });
+ */
+export function useDeleteTaskMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteTaskMutation, DeleteTaskMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteTaskMutation, DeleteTaskMutationVariables>(DeleteTaskDocument, baseOptions);
+      }
+export type DeleteTaskMutationHookResult = ReturnType<typeof useDeleteTaskMutation>;
+export type DeleteTaskMutationResult = ApolloReactCommon.MutationResult<DeleteTaskMutation>;
+export type DeleteTaskMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteTaskMutation, DeleteTaskMutationVariables>;
+export const SaveTaskDocument = gql`
+    mutation SaveTask($categoryId: String!, $taskName: String!) {
+  saveTask(categoryId: $categoryId, taskName: $taskName) {
+    id
+    categoryId
+    createdAt
+    taskName
+    userId
+  }
+}
+    `;
+export type SaveTaskMutationFn = ApolloReactCommon.MutationFunction<SaveTaskMutation, SaveTaskMutationVariables>;
+
+/**
+ * __useSaveTaskMutation__
+ *
+ * To run a mutation, you first call `useSaveTaskMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveTaskMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveTaskMutation, { data, loading, error }] = useSaveTaskMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      taskName: // value for 'taskName'
+ *   },
+ * });
+ */
+export function useSaveTaskMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveTaskMutation, SaveTaskMutationVariables>) {
+        return ApolloReactHooks.useMutation<SaveTaskMutation, SaveTaskMutationVariables>(SaveTaskDocument, baseOptions);
+      }
+export type SaveTaskMutationHookResult = ReturnType<typeof useSaveTaskMutation>;
+export type SaveTaskMutationResult = ApolloReactCommon.MutationResult<SaveTaskMutation>;
+export type SaveTaskMutationOptions = ApolloReactCommon.BaseMutationOptions<SaveTaskMutation, SaveTaskMutationVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
@@ -923,8 +1040,8 @@ export const UserDataDocument = gql`
     tasks {
       id
       taskName
+      categoryId
       createdAt
-      description
     }
   }
 }

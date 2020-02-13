@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { Category, useSetCycleCategoryMutation } from '../../../../../generated/graphql'
 
@@ -18,6 +18,14 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
 }) => {
   const [setCycleCategory] = useSetCycleCategoryMutation()
 
+  useEffect(() => {
+    if (!selectedCategoryId && categories && categories.length) {
+      setCycleCategory({ variables: { categoryId: categories[0].id } })
+    }
+  }, [selectedCategoryId, categories])
+
+  if (!categories) return 'Set up categories in settings...'
+
   return (
     <Row>
       <div> Category </div>
@@ -33,7 +41,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
               {cat.categoryName}
             </option>
           ))}
-        <option value="free">Free</option>
+        <option value="">none</option>
       </select>
     </Row>
   )

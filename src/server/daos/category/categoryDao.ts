@@ -10,7 +10,6 @@ export async function saveCategory(userId: string, categoryName: string) {
     createdAt: moment().toISOString(),
     isArchived: false,
   }
-
   return await insertDocumentIntoCollection(CATEGORY_COLLECTION, category)
 }
 
