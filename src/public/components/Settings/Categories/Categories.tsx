@@ -2,10 +2,24 @@ import React from 'react'
 import update from 'immutability-helper'
 import { Input } from '../Input/Input'
 import { Pills } from '../Pill/Pills'
-import { useDeleteCategoryMutation, useSaveCategoryMutation } from '../../../../generated/graphql'
+import {
+  Category,
+  useDeleteCategoryMutation,
+  useSaveCategoryMutation,
+} from '../../../../generated/graphql'
 import { USER_DATA } from '../../../gql/queries/userData'
 
-export function Categories({ categories }) {
+interface CategoriesProps {
+  categories: Category[]
+  selectedCategoryId?: string
+  setSelectedCategoryId
+}
+
+export const Categories: React.FC<CategoriesProps> = ({
+  categories,
+  selectedCategoryId,
+  setSelectedCategoryId,
+}) => {
   const [saveCategory] = useSaveCategoryMutation({
     // @ts-ignore
     update: (cache, { data: { saveCategory } }) => {
@@ -54,6 +68,8 @@ export function Categories({ categories }) {
       <Pills
         type="category"
         items={categories}
+        onSelect={setSelectedCategoryId}
+        selectedItemId={selectedCategoryId}
         deleteCallback={categoryId =>
           deleteCategory({
             variables: { categoryId },
