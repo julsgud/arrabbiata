@@ -4,6 +4,7 @@ import { Input } from '../Input/Input'
 import { Pills } from '../Pill/Pills'
 import {
   Category,
+  SaveCategoryDocument,
   useDeleteCategoryMutation,
   useSaveCategoryMutation,
 } from '../../../../generated/graphql'
@@ -41,8 +42,6 @@ export const Categories: React.FC<CategoriesProps> = ({
     update: (cache, { data: { deleteCategory } }) => {
       const previousQueryResult = cache.readQuery({ query: USER_DATA })
       const indexOfDeletedCategory = categories.findIndex(cat => cat.id === deleteCategory.id)
-      console.log(previousQueryResult)
-      console.log(indexOfDeletedCategory)
       const newData = update(previousQueryResult, {
         // @ts-ignore
         userData: {
@@ -53,6 +52,7 @@ export const Categories: React.FC<CategoriesProps> = ({
       })
       cache.writeQuery({ query: USER_DATA, data: newData })
     },
+    onCompleted: () => setSelectedCategoryId(categories[0].id),
   })
 
   useEffect(() => {

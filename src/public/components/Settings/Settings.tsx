@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useCurrentUserData } from '../../hooks/useCurrentUserData'
 import { Categories } from './Categories/Categories'
+import { Tasks } from './Tasks/Tasks'
 
 export function Settings() {
   const user = useCurrentUserData()
   const [selectedCategoryId, setSelectedCategoryId] = useState('')
-
-  const { categories } = user
+  const { categories, tasks } = user
   return (
     <>
       <Categories
@@ -14,6 +14,7 @@ export function Settings() {
         setSelectedCategoryId={setSelectedCategoryId}
         selectedCategoryId={selectedCategoryId}
       />
+      <Tasks tasks={tasks} selectedCategoryId={selectedCategoryId} />
     </>
   )
 }

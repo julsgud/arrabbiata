@@ -11,11 +11,11 @@ interface PillsProps {
   items: any[]
   type: string
   deleteCallback
-  onSelect
+  onSelect?
   selectedItemId?: string
 }
 
-export const Pills: React.FC<PillsProps> = ({ items, type, selectedItemId, deleteCallback, onSelect }) => {
+export const Pills: React.FC<PillsProps> = ({ items, type, selectedItemId, deleteCallback, onSelect = () => {} }) => {
   return (
     <Wrapper>
       {items.map(item => (

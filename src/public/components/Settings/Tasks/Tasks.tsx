@@ -2,26 +2,15 @@ import React from 'react'
 import update from 'immutability-helper'
 import { Input } from '../Input/Input'
 import { Pills } from '../Pill/Pills'
-import {
-  Category,
-  useDeleteCategoryMutation,
-  useDeleteTaskMutation,
-  useSaveTaskMutation,
-} from '../../../../generated/graphql'
+import { Task, useDeleteTaskMutation, useSaveTaskMutation } from '../../../../generated/graphql'
 import { USER_DATA } from '../../../gql/queries/userData'
-import { deleteTask } from '../../../../server/daos/task/taskDao'
 
-interface CategoriesProps {
-  categories: Category[]
+interface TasksProps {
+  tasks: Task[]
   selectedCategoryId?: string
-  setSelectedCategoryId
 }
 
-export const Tasks: React.FC<CategoriesProps> = ({
-  tasks,
-  selectedCategoryId,
-  setSelectedCategoryId,
-}) => {
+export const Tasks: React.FC<TasksProps> = ({ tasks, selectedCategoryId }) => {
   const [saveTask] = useSaveTaskMutation({
     // @ts-ignore
     update: (cache, { data: { saveTask } }) => {
@@ -42,9 +31,7 @@ export const Tasks: React.FC<CategoriesProps> = ({
     // @ts-ignore
     update: (cache, { data: { deleteTask } }) => {
       const previousQueryResult = cache.readQuery({ query: USER_DATA })
-      const indexOfDeletedCategory = tasks.findIndex(cat => cat.id === deleteTask.id)
-      console.log(previousQueryResult)
-      console.log(indexOfDeletedCategory)
+      const indexOfDeletedCategory = tasks.findIndex(task => task.id === deleteTask.id)
       const newData = update(previousQueryResult, {
         // @ts-ignore
         userData: {
@@ -71,17 +58,20 @@ export const Tasks: React.FC<CategoriesProps> = ({
           })
         }
       />
-      <Pills
-        type="category"
-        items={tasksInCategory}
-        onSelect={setSelectedCategoryId}
-        selectedItemId={selectedCategoryId}
-        deleteCallback={taskId =>
-          deleteTask({
-            variables: { taskId },
-          })
-        }
-      />
+      {tasksInCategory && !tasksInCategory.length ? (
+        'Add tasks to category...'
+      ) : (
+        <Pills
+          type="task"
+          items={tasksInCategory}
+          selectedItemId={selectedCategoryId}
+          deleteCallback={taskId =>
+            deleteTask({
+              variables: { taskId },
+            })
+          }
+        />
+      )}
     </>
   )
 }
