@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import update from 'immutability-helper'
 import { Input } from '../Input/Input'
 import { Pills } from '../Pill/Pills'
 import {
   Category,
   useDeleteCategoryMutation,
-  useSaveCategoryMutation,
+  useDeleteTaskMutation,
+  useSaveTaskMutation,
 } from '../../../../generated/graphql'
 import { USER_DATA } from '../../../gql/queries/userData'
+import { deleteTask } from '../../../../server/daos/task/taskDao'
 
 interface CategoriesProps {
   categories: Category[]
@@ -15,20 +17,20 @@ interface CategoriesProps {
   setSelectedCategoryId
 }
 
-export const Categories: React.FC<CategoriesProps> = ({
-  categories,
+export const Tasks: React.FC<CategoriesProps> = ({
+  tasks,
   selectedCategoryId,
   setSelectedCategoryId,
 }) => {
-  const [saveCategory] = useSaveCategoryMutation({
+  const [saveTask] = useSaveTaskMutation({
     // @ts-ignore
-    update: (cache, { data: { saveCategory } }) => {
+    update: (cache, { data: { saveTask } }) => {
       const previousQueryResult = cache.readQuery({ query: USER_DATA })
       const newData = update(previousQueryResult, {
         // @ts-ignore
         userData: {
-          categories: {
-            $push: [saveCategory],
+          tasks: {
+            $push: [saveTask],
           },
         },
       })
@@ -36,17 +38,17 @@ export const Categories: React.FC<CategoriesProps> = ({
     },
   })
 
-  const [deleteCategory] = useDeleteCategoryMutation({
+  const [deleteTask] = useDeleteTaskMutation({
     // @ts-ignore
-    update: (cache, { data: { deleteCategory } }) => {
+    update: (cache, { data: { deleteTask } }) => {
       const previousQueryResult = cache.readQuery({ query: USER_DATA })
-      const indexOfDeletedCategory = categories.findIndex(cat => cat.id === deleteCategory.id)
+      const indexOfDeletedCategory = tasks.findIndex(cat => cat.id === deleteTask.id)
       console.log(previousQueryResult)
       console.log(indexOfDeletedCategory)
       const newData = update(previousQueryResult, {
         // @ts-ignore
         userData: {
-          categories: {
+          tasks: {
             $splice: [[indexOfDeletedCategory, 1]],
           },
         },
@@ -55,30 +57,28 @@ export const Categories: React.FC<CategoriesProps> = ({
     },
   })
 
-  useEffect(() => {
-    if (!selectedCategoryId && categories && categories.length) {
-      setSelectedCategoryId(categories[0].id)
-    }
-  }, [selectedCategoryId, categories])
+  const tasksInCategory = selectedCategoryId
+    ? tasks.filter(task => task.categoryId === selectedCategoryId)
+    : []
 
   return (
     <>
-      Categories
+      Tasks
       <Input
-        onEnterCallback={categoryName =>
-          saveCategory({
-            variables: { categoryName },
+        onEnterCallback={taskName =>
+          saveTask({
+            variables: { categoryId: selectedCategoryId, taskName },
           })
         }
       />
       <Pills
         type="category"
-        items={categories}
+        items={tasksInCategory}
         onSelect={setSelectedCategoryId}
         selectedItemId={selectedCategoryId}
-        deleteCallback={categoryId =>
-          deleteCategory({
-            variables: { categoryId },
+        deleteCallback={taskId =>
+          deleteTask({
+            variables: { taskId },
           })
         }
       />
