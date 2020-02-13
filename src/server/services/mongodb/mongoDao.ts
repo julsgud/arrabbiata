@@ -27,6 +27,20 @@ export async function deleteDocumentFromCollectionById(collection: string, id) {
   return
 }
 
+export async function updateDocumentById(
+  collection: string,
+  id: string,
+  fieldToUpdate: string,
+  value: any
+) {
+  const _id = new ObjectId(id)
+  const [err] = await to(
+    mongoDb.collection(collection).updateOne({ _id }, { $set: { [fieldToUpdate]: value } })
+  )
+  if (err) return handleError(err, true)
+  return
+}
+
 export async function getDocumentsFromCollectionByField(
   collection: string,
   field: string,
@@ -35,7 +49,7 @@ export async function getDocumentsFromCollectionByField(
   const [err, documents] = await to(
     mongoDb
       .collection(collection)
-      .find({ [field]: value })
+      .find({ [field]: value, isArchived: false })
       .toArray()
   )
   if (err) return handleError(err, true)

@@ -9,6 +9,7 @@ export const typeDefs = gql`
     email: String
     categories: [Category]
     tasks: [Task]
+    isArchived: Boolean
   }
 
   type Category {
@@ -16,6 +17,7 @@ export const typeDefs = gql`
     categoryName: String
     userId: String
     createdAt: String
+    isArchived: Boolean
   }
 
   type Task {
@@ -23,7 +25,7 @@ export const typeDefs = gql`
     taskName: String
     userId: String
     createdAt: String
-    description: String
+    isArchived: Boolean
   }
 
   type Timer {
