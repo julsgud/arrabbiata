@@ -11,6 +11,7 @@ import { GET_TIMER } from '../../gql/queries/timer'
 import { DEFAULT_TIMER_OBJECT } from '../Home/Timer/Timer.util'
 import { mutationResolvers } from '../../gql/resolvers/mutationResolvers'
 import { Navigation } from '../Navigation/Navigation'
+import { requestNotificationsPermissions } from '../../util/notificationsUtil'
 
 export const link = createHttpLink({
   uri: 'http://localhost:4000/graphql',
@@ -38,6 +39,7 @@ export function App() {
     })
 
     setClient(apolloClient)
+    requestNotificationsPermissions()
   }, [])
 
   if (client === undefined) return <div>Loading...</div>

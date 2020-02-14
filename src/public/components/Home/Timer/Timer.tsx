@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import {
   isTimerDone,
   isTimerPaused,
@@ -17,10 +17,12 @@ interface TimerProps {
 }
 
 export const Timer: React.FC<TimerProps> = ({ user }) => {
+  const [quickAddEnabled, setQuickAddEnabled] = useState(false)
   const {
     currentTimeInSeconds,
     isTimerRunning,
     notes,
+    quickAddCycle,
     saveCycle,
     selectedCategoryId,
     selectedTaskId,
@@ -30,7 +32,6 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
     timeLimitInSeconds,
     toggleIsRunning,
   } = useTimer()
-
   const resetTime = () => setCurrentTime(0)
 
   const updateCurrentTime = useCallback(() => {
@@ -65,15 +66,37 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
       {secondsToMinutesSecondsFormat(currentTimeInSeconds)}
       <br />
       <CategorySelect selectedCategoryId={selectedCategoryId} categories={user.categories} />
-      <TaskSelect selectedCategoryId={selectedCategoryId} selectedTaskId={selectedTaskId} tasks={user.tasks} />
+      <TaskSelect
+        selectedCategoryId={selectedCategoryId}
+        selectedTaskId={selectedTaskId}
+        tasks={user.tasks}
+      />
       <TimeLimitSelect timeLimitInSeconds={timeLimitInSeconds} />
       <Notes notes={notes} />
       <br />
-      <button onClick={() => toggleIsRunning()}>
-        {isTimerRunning ? 'Pause' : currentTimeInSeconds === 0 ? 'Start' : 'Continue'}
+      {!quickAddEnabled && (
+        <>
+          <button onClick={() => toggleIsRunning()}>
+            {isTimerRunning ? 'Pause' : currentTimeInSeconds === 0 ? 'Start' : 'Continue'}
+          </button>
+          <button onClick={resetTime}>Reset</button>
+        </>
+      )}
+      <button
+        disabled={quickAddEnabled ? false : currentTimeInSeconds === 0}
+        onClick={quickAddEnabled ? quickAddCycle : saveCycle}
+      >
+        Save
       </button>
-      <button onClick={resetTime}>Reset</button>
-      {currentTimeInSeconds !== 0 && <button onClick={saveCycle}>End</button>}
+      <>
+        <input
+          id="quickAdd"
+          type="checkbox"
+          checked={quickAddEnabled}
+          onClick={() => setQuickAddEnabled(!quickAddEnabled)}
+        />
+        <label id="quickAdd"> Quick Add </label>
+      </>
     </>
   )
 }

@@ -40,16 +40,28 @@ export function useTimer() {
       lengthInSeconds: currentTimeInSeconds,
       createdAt: moment().toISOString(),
       categoryIds: [selectedCategoryId],
-      taskIds: [],
+      taskIds: [selectedTaskId],
       notes,
     }
     return saveCycleMutation({ variables: { ...cycle } }).then(() => resetCycle())
   }, [currentTimeInSeconds, selectedCategoryId])
 
+  const quickAddCycle = useCallback(() => {
+    const cycle = {
+      lengthInSeconds: timeLimitInSeconds,
+      createdAt: moment().toISOString(),
+      categoryIds: [selectedCategoryId],
+      taskIds: [selectedTaskId],
+      notes,
+    }
+    return saveCycleMutation({ variables: { ...cycle } }).then(() => resetCycle())
+  }, [timeLimitInSeconds, selectedCategoryId])
+
   return {
     currentTimeInSeconds,
     isTimerRunning,
     notes,
+    quickAddCycle,
     saveCycle,
     selectedCategoryId,
     selectedTaskId,
