@@ -21,6 +21,7 @@ export const Navigation: React.FC<NavigationProps> = ({ children }) => {
       <NavigationWrapper>
         <Link to="/app/home"> Home </Link>
         <Link to="/app/settings"> Settings </Link>
+        <Link to="/app/reports"> Reports </Link>
       </NavigationWrapper>
       {children}
     </>
