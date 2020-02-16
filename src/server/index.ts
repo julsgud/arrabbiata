@@ -11,6 +11,8 @@ import uuid from 'uuid/v4'
 import { schema } from './gql/schema'
 import { runPassport } from './util/passportUtil'
 
+
+//
 runPassport()
 
 const app = express()
@@ -40,6 +42,7 @@ const sessionOptions = {
 }
 app.use(session(sessionOptions))
 
+
 // Passport Init
 app.use(passport.initialize())
 app.use(passport.session())
@@ -53,6 +56,13 @@ app.get(
     failureRedirect: process.env.CLIENT_URL,
   })
 )
+
+// service worker
+app.get("/service-worker.js", (req, res) => {
+  console.log('service worker get')
+  res.sendFile(path.join(__dirname, "./services/service-worker.js"), err => console.log(err));
+});
+
 
 // GraphQL
 app.use(

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react'
 import {
   isTimerDone,
   isTimerPaused,
-  secondsToMinutesSecondsFormat,
+  secondsToHoursMinutesSecondsFormat,
   TIMER_DIRECTION,
 } from './Timer.util'
 import { useTimer } from '../../../hooks/useTimer'
@@ -11,6 +11,7 @@ import { User } from '../../../../generated/graphql'
 import { TimeLimitSelect } from './TimeLimitSelect/TimeLimitSelect'
 import { TaskSelect } from './TaskSelect/TaskSelect'
 import { Notes } from './Notes/Notes'
+import { displayCycleFinishedNotification } from '../../../util/notificationsUtil'
 
 interface TimerProps {
   user: User
@@ -32,6 +33,7 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
     timeLimitInSeconds,
     toggleIsRunning,
   } = useTimer()
+
   const resetTime = () => setCurrentTime(0)
 
   const updateCurrentTime = useCallback(() => {
@@ -48,6 +50,10 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
     if (isTimerRunning) {
       if (isTimerDone(timeLimitInSeconds, currentTimeInSeconds, timerDirection)) {
         stopTimer()
+        displayCycleFinishedNotification(
+          user.categories.find(category => category.id === selectedCategoryId).categoryName,
+          timeLimitInSeconds
+        )
         clearInterval(interval)
       } else {
         interval = setInterval(updateCurrentTime, 1000)
@@ -59,11 +65,11 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
     }
 
     return () => clearInterval(interval)
-  }, [isTimerRunning, currentTimeInSeconds, timeLimitInSeconds])
+  }, [isTimerRunning, currentTimeInSeconds, timeLimitInSeconds, user, selectedCategoryId])
 
   return (
     <>
-      {secondsToMinutesSecondsFormat(currentTimeInSeconds)}
+      {secondsToHoursMinutesSecondsFormat(currentTimeInSeconds)}
       <br />
       <CategorySelect selectedCategoryId={selectedCategoryId} categories={user.categories} />
       <TaskSelect

@@ -1,6 +1,7 @@
 require('dotenv').config()
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
   entry: './src/public/index',
@@ -18,7 +19,7 @@ module.exports = {
   devServer: {
     port: process.env.CLIENT_PORT,
     historyApiFallback: true,
-    open: true
+    open: true,
   },
 
   module: {
@@ -37,6 +38,7 @@ module.exports = {
       },
     ],
   },
+
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/public/index.html',
@@ -44,4 +46,6 @@ module.exports = {
       FAUNA_SERVER_SECRET: process.env.FAUNA_SERVER_SECRET,
     }),
   ],
+
+  stats: 'minimal',
 }

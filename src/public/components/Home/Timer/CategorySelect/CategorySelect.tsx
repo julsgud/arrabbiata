@@ -22,7 +22,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
     if (!selectedCategoryId && categories && categories.length) {
       setCycleCategory({ variables: { categoryId: categories[0].id } })
     }
-  }, [selectedCategoryId, categories])
+  }, [])
 
   if (!categories) return 'Set up categories in settings...'
 

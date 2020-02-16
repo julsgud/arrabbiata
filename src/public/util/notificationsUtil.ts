@@ -1,3 +1,5 @@
+import { secondsToHoursMinutesSecondsFormat } from '../components/Home/Timer/Timer.util'
+
 export const requestNotificationsPermissions = () => {
   if (!('Notification' in window)) {
     alert('This browser does not support system notifications')
@@ -14,4 +16,12 @@ export const requestNotificationsPermissions = () => {
       }
     })
   }
+}
+
+export const displayCycleFinishedNotification = (categoryName, cycleLengthInSeconds) => {
+  const notification = new Notification(
+    `${secondsToHoursMinutesSecondsFormat(cycleLengthInSeconds)} ${categoryName} cycle is done!`
+  )
+
+  setTimeout(() => notification.close(), 30000)
 }

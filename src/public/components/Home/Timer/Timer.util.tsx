@@ -1,15 +1,28 @@
 import { TimerDirection } from '../../../../generated/graphql'
 
-export function secondsToMinutesSecondsFormat(seconds: number): String {
-  const m = Math.floor((seconds % 3600) / 60)
-  const s = Math.floor((seconds % 3600) % 60)
-  return `${formatMinutesForTimeDisplay(m)}:${formatSecondsForTimeDisplay(s)}`
+export function secondsToHoursMinutesSecondsFormat(totalSeconds: number): String {
+  const hours = Math.floor(totalSeconds / 3600)
+  const minutes = Math.floor((totalSeconds % 3600) / 60)
+  const seconds = Math.floor((totalSeconds % 3600) % 60)
+
+  return `${hours ? formatTimeForDisplay(hours, false) + ':' : ''}${formatTimeForDisplay(
+    minutes,
+    !!hours
+  )}:${formatTimeForDisplay(seconds, true)}`
 }
 
-export function formatSecondsForTimeDisplay(number: number): String {
-  if (!number) return '00'
-  if (number < 10) return `0${number.toString()}`
-  return number.toString()
+export function formatTimeForDisplay(
+  number: number,
+  displayAsDoubleDigit: boolean = false
+): String {
+  if (displayAsDoubleDigit) {
+    if (!number) return '00'
+    if (number < 10) return `0${number.toString()}`
+    return number.toString()
+  }
+
+  if (!number) return '0'
+  return `${number.toString()}`
 }
 
 export function formatMinutesForTimeDisplay(number: number): String {
@@ -87,7 +100,7 @@ export const DEFAULT_TIMER_OBJECT = {
   timerDirection: TIMER_DIRECTION.UP,
   selectedCategoryId: '',
   selectedTaskId: '',
-  timeLimitInSeconds: TIMER_LIMITS_IN_SECONDS[TIMER_LIMITS_IN_SECONDS.length - 1],
+  timeLimitInSeconds: TIMER_LIMITS_IN_SECONDS[TIMER_LIMITS_IN_SECONDS.length - 1].value,
   notes: '',
   __typename: 'Timer',
 }
