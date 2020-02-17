@@ -1,7 +1,6 @@
 require('dotenv').config()
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const WorkboxPlugin = require('workbox-webpack-plugin')
 
 module.exports = {
   entry: './src/public/index',
@@ -46,6 +45,4 @@ module.exports = {
       FAUNA_SERVER_SECRET: process.env.FAUNA_SERVER_SECRET,
     }),
   ],
-
-  stats: 'minimal',
 }

@@ -1,24 +1,57 @@
 import React, { useState } from 'react'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import styled from 'styled-components'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import { useCurrentUserData } from '../../hooks/useCurrentUserData'
 
 const Wrapper = styled.div`
   display: flex;
   flex-flow: column nowrap;
+
+  & .DayPickerInput-OverlayWrapper {
+    color: black;
+  }
 `
 
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function subtractDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() - days);
+  return result;
+}
+
 export const Reports: React.FC = () => {
-  const [startDate, setStartDate] = useState(moment().subtract('1', 'days'))
-  const [endDate, setEndDate] = useState(moment())
+  const [endDate, setEndDate] = useState<Date>(new Date())
+  const [startDate, setStartDate] = useState<Date>(subtractDays(endDate, 1))
   const user = useCurrentUserData()
   const [selectedCategoryId, setSelectedCategoryId] = useState('')
   const { categories, tasks } = user
 
   return (
     <Wrapper>
-      <div> From: {moment(startDate).format('LL')} </div>
-      <div> To: {moment(endDate).format('LL')} </div>
+      <div>
+        From:
+        <DatePicker
+          maxDate={subtractDays(endDate, 1)}
+          selected={startDate}
+          onChange={setStartDate}
+        />
+      </div>
+      <div>
+        To:
+        <DatePicker
+          maxDate={new Date()}
+          minDate={addDays(startDate, 1)}
+          selected={endDate}
+          onChange={setEndDate}
+        />
+      </div>
     </Wrapper>
   )
 }
