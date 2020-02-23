@@ -1,4 +1,4 @@
-import { secondsToHoursMinutesSecondsFormat } from '../components/Home/Timer/Timer.util'
+import { secondsToHoursMinutesSecondsFormat } from '../components/Home/Cycle/Cycle.util'
 
 export const requestNotificationsPermissions = () => {
   if (!('Notification' in window)) {

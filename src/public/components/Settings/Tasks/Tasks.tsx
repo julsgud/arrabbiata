@@ -53,6 +53,7 @@ export const Tasks: React.FC<TasksProps> = ({ tasks, selectedCategoryId }) => {
       Tasks
       <Input
         onEnterCallback={taskName =>
+          // @ts-ignore
           saveTask({
             variables: { categoryId: selectedCategoryId, taskName },
           })

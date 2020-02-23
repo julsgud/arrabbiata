@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSetTimeLimitMutation } from '../../../../../generated/graphql'
-import { Row } from '../CategorySelect/CategorySelect'
-import { TIMER_LIMITS_IN_SECONDS } from '../Timer.util'
+import { Row } from '../../../common/CategorySelect/CategorySelect'
+import { TIMER_LIMITS_IN_SECONDS } from '../Cycle.util'
 
 interface TimeLimitSelectProps {
   timeLimitInSeconds: number

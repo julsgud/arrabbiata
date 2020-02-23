@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import moment, { Moment } from 'moment'
 import styled from 'styled-components'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -26,8 +25,10 @@ function subtractDays(date, days) {
   return result;
 }
 
+const getToday = () => new Date()
+
 export const Reports: React.FC = () => {
-  const [endDate, setEndDate] = useState<Date>(new Date())
+  const [endDate, setEndDate] = useState<Date>(getToday)
   const [startDate, setStartDate] = useState<Date>(subtractDays(endDate, 1))
   const user = useCurrentUserData()
   const [selectedCategoryId, setSelectedCategoryId] = useState('')
@@ -46,7 +47,7 @@ export const Reports: React.FC = () => {
       <div>
         To:
         <DatePicker
-          maxDate={new Date()}
+          maxDate={getToday()}
           minDate={addDays(startDate, 1)}
           selected={endDate}
           onChange={setEndDate}

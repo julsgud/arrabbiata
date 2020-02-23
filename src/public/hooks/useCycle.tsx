@@ -9,7 +9,7 @@ import {
 } from '../../generated/graphql'
 import moment from 'moment'
 
-export function useTimer() {
+export function useCycle() {
   const {
     data: {
       // @ts-ignore

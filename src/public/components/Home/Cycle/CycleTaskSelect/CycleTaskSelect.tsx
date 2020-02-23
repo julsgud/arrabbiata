@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import styled from 'styled-components'
 import { Task, useSetCycleTaskMutation } from '../../../../../generated/graphql'
+import { Select } from '../../../common/Select/Select'
 
 interface TaskSelectProps {
   selectedCategoryId: string
@@ -8,12 +8,7 @@ interface TaskSelectProps {
   tasks?: Task[]
 }
 
-export const Row = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-`
-
-export const TaskSelect: React.FC<TaskSelectProps> = ({
+export const CycleTaskSelect: React.FC<TaskSelectProps> = ({
   selectedCategoryId,
   selectedTaskId,
   tasks = [],
@@ -32,21 +27,12 @@ export const TaskSelect: React.FC<TaskSelectProps> = ({
   if (!selectedCategoryId) return null
 
   return (
-    <Row>
-      <div> Task </div>
-      <select
-        value={selectedTaskId}
-        onChange={e => setCycleTask({ variables: { taskId: e.target.value } })}
-      >
-        {tasksInCategory &&
-          tasksInCategory.length &&
-          tasksInCategory.map((task: any) => (
-            <option key={task.id} value={task.id}>
-              {task.taskName}
-            </option>
-          ))}
-        <option value="">none</option>
-      </select>
-    </Row>
+    <Select
+      itemType="task"
+      items={tasksInCategory}
+      autoSelectEnabled={false}
+      selectedValue={selectedTaskId}
+      onSelect={taskId => setCycleTask({ variables: { taskId } })}
+    />
   )
 }

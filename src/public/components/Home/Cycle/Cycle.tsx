@@ -4,20 +4,20 @@ import {
   isTimerPaused,
   secondsToHoursMinutesSecondsFormat,
   TIMER_DIRECTION,
-} from './Timer.util'
-import { useTimer } from '../../../hooks/useTimer'
-import { CategorySelect } from './CategorySelect/CategorySelect'
+} from './Cycle.util'
+import { useCycle } from '../../../hooks/useCycle'
 import { User } from '../../../../generated/graphql'
 import { TimeLimitSelect } from './TimeLimitSelect/TimeLimitSelect'
-import { TaskSelect } from './TaskSelect/TaskSelect'
 import { Notes } from './Notes/Notes'
 import { displayCycleFinishedNotification } from '../../../util/notificationsUtil'
+import { CycleCategorySelect } from './CycleCategorySelect/CycleCategorySelect'
+import { CycleTaskSelect } from './CycleTaskSelect/CycleTaskSelect'
 
-interface TimerProps {
+interface CycleProps {
   user: User
 }
 
-export const Timer: React.FC<TimerProps> = ({ user }) => {
+export const Cycle: React.FC<CycleProps> = ({ user }) => {
   const [quickAddEnabled, setQuickAddEnabled] = useState(false)
   const {
     currentTimeInSeconds,
@@ -32,7 +32,7 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
     timerDirection,
     timeLimitInSeconds,
     toggleIsRunning,
-  } = useTimer()
+  } = useCycle()
 
   const resetTime = () => setCurrentTime(0)
 
@@ -71,8 +71,8 @@ export const Timer: React.FC<TimerProps> = ({ user }) => {
     <>
       {secondsToHoursMinutesSecondsFormat(currentTimeInSeconds)}
       <br />
-      <CategorySelect selectedCategoryId={selectedCategoryId} categories={user.categories} />
-      <TaskSelect
+      <CycleCategorySelect selectedCategoryId={selectedCategoryId} categories={user.categories} />
+      <CycleTaskSelect
         selectedCategoryId={selectedCategoryId}
         selectedTaskId={selectedTaskId}
         tasks={user.tasks}

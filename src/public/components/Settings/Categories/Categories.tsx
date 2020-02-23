@@ -4,7 +4,6 @@ import { Input } from '../Input/Input'
 import { Pills } from '../Pill/Pills'
 import {
   Category,
-  SaveCategoryDocument,
   useDeleteCategoryMutation,
   useSaveCategoryMutation,
 } from '../../../../generated/graphql'
