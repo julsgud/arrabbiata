@@ -42,8 +42,8 @@ export async function getCycles(
     }
   }
 
-  if (categoryId) query.categoryId = categoryId
-  if (taskId) query.taskId = taskId
+  if (categoryId) query.categoryIds = [categoryId]
+  if (taskId) query.taskIds = [taskId]
 
   return await getDocumentsFromCollectionByQuery(CYCLE_COLLECTION, query)
 }

@@ -30,7 +30,7 @@ export const CycleFetcher: React.FC<CycleFetcherProps> = ({
   if (loading) return <> Loading... </>
   if (error) return <GQLError error={error} />
 
-  console.log(data)
+  const {cycles = []} = data
 
-  return <div>{children}</div>
+  return <div> {cycles.length || 9} </div>
 }

@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
 import { useCurrentUserData } from '../../hooks/useCurrentUserData'
 import { Select } from '../common/Select/Select'
 import { CycleFetcher } from './CycleFetcher/CycleFetcher'
+import { DateSelect, THIS_MONTH } from './DateSelect/DateSelect'
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,23 +14,9 @@ const Wrapper = styled.div`
   }
 `
 
-function addDays(date, days) {
-  const result = new Date(date)
-  result.setDate(result.getDate() + days)
-  return result
-}
-
-function subtractDays(date, days) {
-  const result = new Date(date)
-  result.setDate(result.getDate() - days)
-  return result
-}
-
-const getToday = () => new Date()
-
 export const Reports: React.FC = () => {
-  const [endDate, setEndDate] = useState<Date>(getToday)
-  const [startDate, setStartDate] = useState<Date>(subtractDays(endDate, 1))
+  const [endDate, setEndDate] = useState(new Date(THIS_MONTH.endDate))
+  const [startDate, setStartDate] = useState(new Date(THIS_MONTH.startDate))
   const user = useCurrentUserData()
   const [selectedCategoryId, setSelectedCategoryId] = useState('')
   const [selectedTaskId, setSelectedTaskId] = useState('')
@@ -40,29 +25,17 @@ export const Reports: React.FC = () => {
     ? tasks.filter(task => task.categoryId === selectedCategoryId)
     : []
 
-  console.log('cat', selectedCategoryId)
-  console.log(selectedTaskId)
-
   return (
     <Wrapper>
       <div>
-        From:
-        <DatePicker
-          maxDate={subtractDays(endDate, 1)}
-          selected={startDate}
-          onChange={setStartDate}
-          dateFormat="MM/dd"
+        <DateSelect
+          startDate={startDate}
+          endDate={endDate}
+          setStartDate={setStartDate}
+          setEndDate={setEndDate}
         />
       </div>
       <div>
-        To:
-        <DatePicker
-          maxDate={getToday()}
-          minDate={addDays(startDate, 1)}
-          selected={endDate}
-          onChange={setEndDate}
-          dateFormat="MM/dd"
-        />
         <Select
           items={categories}
           itemType="category"
@@ -85,8 +58,8 @@ export const Reports: React.FC = () => {
       <CycleFetcher
         taskId={selectedTaskId}
         categoryId={selectedCategoryId}
-        startDate={(startDate && startDate.toISOString()) || ''}
-        endDate={(endDate && endDate.toISOString()) || ''}
+        startDate={startDate || ''}
+        endDate={endDate || ''}
       >
         <div> Some reports here </div>
       </CycleFetcher>
