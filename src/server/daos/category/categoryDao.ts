@@ -1,4 +1,3 @@
-import moment from 'moment'
 import { insertDocumentIntoCollection, updateDocumentById } from '../../services/mongodb/mongoDao'
 
 export const CATEGORY_COLLECTION = 'categories'
@@ -7,7 +6,7 @@ export async function saveCategory(userId: string, categoryName: string) {
   const category = {
     userId,
     categoryName,
-    createdAt: moment().toISOString(),
+    createdAt: new Date(),
     isArchived: false,
   }
   return await insertDocumentIntoCollection(CATEGORY_COLLECTION, category)

@@ -1,4 +1,4 @@
-import { saveCycle } from '../daos/cycle/cycleDao'
+import { getCycles, saveCycle } from '../daos/cycle/cycleDao'
 import { getUserCollectionByUserId } from '../daos/user/userDao'
 import { deleteCategory, saveCategory } from '../daos/category/categoryDao'
 import { deleteTask, saveTask } from '../daos/task/taskDao'
@@ -11,6 +11,9 @@ export const resolvers = {
         categories: await getUserCollectionByUserId('categories', context.user.id.toString()),
         tasks: await getUserCollectionByUserId('tasks', context.user.id.toString()),
       }
+    },
+    cycles: async (root, { startDate, endDate, categoryId, taskId }, context) => {
+      return await getCycles(context.user.id.toString(), startDate, endDate, categoryId, taskId)
     },
   },
   Mutation: {

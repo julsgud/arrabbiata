@@ -5,7 +5,7 @@ import { getFirstDocumentOnIndexById } from '../../services/fauna/faunaDao'
 import { User } from '../../../generated/graphql'
 import {
   getDocumentFromCollectionById,
-  getDocumentsFromCollectionByField,
+  getDocumentsFromCollectionByQuery,
   getFirstDocumentFromCollectionByField,
 } from '../../services/mongodb/mongoDao'
 
@@ -33,10 +33,8 @@ export async function getUserByEmail(email: string): Promise<User | Error> {
   return response
 }
 
-export async function getUserCollectionByUserId(
-  collection: string,
-  userId: string
-): Promise<any> {
-  const documents = await getDocumentsFromCollectionByField(collection, 'userId', userId)
+export async function getUserCollectionByUserId(collection: string, userId: string): Promise<any> {
+  const query = { userId }
+  const documents = await getDocumentsFromCollectionByQuery(collection, query)
   return documents || []
 }

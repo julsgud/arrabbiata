@@ -59,6 +59,7 @@ export const typeDefs = gql`
     currentUser: User
     userData: User
     timer: Timer!
+    cycles(startDate: String, endDate: String, categoryId: String, taskId: String): [Cycle]
   }
 
   type AuthPayload {

@@ -2,7 +2,8 @@ import to from 'await-to-js'
 import _ from 'lodash'
 import { mongoDb } from './mongoDbClient'
 import { ObjectId } from 'mongodb'
-import { handleError } from '../../util/errorHandler'
+// @ts-ignore
+import { handleError, objectLogger } from '../../util/errorHandler'
 
 export async function getFirstDocumentFromCollectionByField(
   collection: string,
@@ -41,18 +42,31 @@ export async function updateDocumentById(
   return
 }
 
-export async function getDocumentsFromCollectionByField(
+export interface MongoDbFieldQuery {
+  [key: string]: any
+}
+
+export async function getDocumentsFromCollectionByQuery(
   collection: string,
-  field: string,
-  value: any
+  query: object,
+  includeIsArchivedField?: boolean
 ): Promise<Array<any> | Error> {
+  let _query: MongoDbFieldQuery = {
+    ...query,
+  }
+
+  if (includeIsArchivedField) {
+    _query.isArchived = false
+  }
+
   const [err, documents] = await to(
     mongoDb
       .collection(collection)
-      .find({ [field]: value, isArchived: false })
+      .find({ ...query })
       .toArray()
   )
   if (err) return handleError(err, true)
+  // objectLogger({ err, documents })
   return removeUnderscoreFromDocumentsIds(documents)
 }
 

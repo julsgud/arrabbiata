@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 interface SelectProps {
-  itemType: string
-  selectedValue: string
   autoSelectEnabled?: boolean
-  onSelect: (categoryId: string) => void
-  items?: any[]
+  items: any[]
+  itemType: string
+  onSelect: (id: string) => void
+  placeholderLabel?: string
+  selectedValue: string
 }
 
 export const Row = styled.div`
@@ -19,6 +20,7 @@ export const Select: React.FC<SelectProps> = ({
   selectedValue,
   onSelect,
   autoSelectEnabled = true,
+  placeholderLabel = 'none',
   items = [],
 }) => {
   useEffect(() => {
@@ -39,7 +41,7 @@ export const Select: React.FC<SelectProps> = ({
               {item[`${itemType}Name`]}
             </option>
           ))}
-        <option value="">none</option>
+        <option value="">{placeholderLabel}</option>
       </select>
     </Row>
   )
